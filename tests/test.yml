@@ -26,5 +26,4 @@
 - include: test-install-blazar.yml
 
 # Test Blazar Functional
-
 - include: test-blazar-functional.yml
