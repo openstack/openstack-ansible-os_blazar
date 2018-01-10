@@ -1,0 +1,49 @@
+---
+# Copyright 2018, taseer94@gmail.com
+# All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- include: blazar_apt_packages.yml
+
+- name: install pip packages
+  pip:
+    name: "{{ item }}"
+  with_items:
+    - virtualenv
+
+- name: clone blazar repo
+  git:
+    repo: "{{ blazar_git_repo }}"
+    dest: /opt/blazar
+    clone: yes
+    version: master
+
+- name: create blazar group
+  group:
+    name: "{{ blazar_system_group_name }}"
+    state: present
+
+- name: create blazar user
+  user:
+    name: "{{ blazar_system_user_name }}"
+    group: "{{ blazar_system_group_name }}"
+    createhome: no
+
+- name: make blazar configuration directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /etc/blazar
+    - /etc/blazar/snapshot

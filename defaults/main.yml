@@ -1,1 +1,95 @@
-# defaults for blazar
+---
+# Copyright 2018, taseer94@gmail.com
+# All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+blazar_package_state: "latest"
+
+blazar_git_repo: https://git.openstack.org/openstack/blazar
+blazar_git_install_branch: master
+blazar_developer_mode: false
+blazar_requirements_git_repo: https://git.openstack.org/openstack/requirements
+blazar_requirements_git_install_branch: master
+
+blazar_venv_tag: untagged
+blazar_bin: "/openstack/venvs/blazar-{{ blazar_venv_tag }}/bin"
+
+blazar_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/blazar.tgz
+
+blazar_etc_dir: "{{ blazar_bin | dirname }}/etc/blazar"
+blazar_conf_dir: /etc/blazar
+
+## Required PIP packages
+blazar_requires_pip_packages:
+  - tox
+  - virtualenv
+  - virtualenv-tools
+  - python-keystoneclient
+
+## blazar developer constraint
+blazar_developer_constraints:
+  -  - "git+{{ blazar_git_repo }}@{{ blazar_git_install_branch }}#egg=blazar"
+
+## System info
+blazar_system_user_name: blazar
+blazar_system_group_name: blazar
+blazar_system_shell: /bin/false
+blazar_system_comment: blazar system user
+blazar_system_user_home: "/var/lib/{{ blazar_system_user_name }}"
+
+## Database credentials
+blazar_db_name: blazar
+blazar_db_user: root
+blazar_db_login_host: ""
+blazar_db_login_user: ""
+blazar_db_login_password: ""
+blazar_db_user_password: ""
+
+## Service Type and Data
+blazar_service_region: RegionOne
+blazar_service_name: blazar
+blazar_service_proto: http
+blazar_service_type: policy
+blazar_service_description: "blazar service"
+blazar_service_publicuri: "{{ blazar_service_publicuri_proto }}://{{ external_lb_vip_address }}:{{ blazar_service_port }}"
+blazar_service_publicurl: "{{ blazar_service_publicuri }}"
+blazar_service_internaluri: "{{ blazar_service_internaluri_proto }}://{{ internal_lb_vip_address }}:{{ blazar_service_port }}"
+blazar_service_internalurl: "{{ blazar_service_internaluri }}"
+blazar_service_adminuri: "{{ blazar_service_adminuri_proto }}://{{ internal_lb_vip_address }}:{{ blazar_service_port }}"
+blazar_service_adminurl: "{{ blazar_service_adminuri }}"
+blazar_service_registry_proto: "{{ blazar_service_proto }}"
+blazar_service_publicuri_proto: "{{ openstack_service_publicuri_proto | default(blazar_service_proto) }}"
+blazar_service_adminuri_proto: "{{ openstack_service_adminuri_proto | default(blazar_service_proto) }}"
+blazar_service_internaluri_proto: "{{ openstack_service_internaluri_proto | default(blazar_service_proto) }}"
+
+#NOTE:  move password to tests/test-vars.yml
+blazar_service_password: password
+
+## Keystone
+blazar_service_project_domain_id: default
+blazar_service_project_name: service
+blazar_service_user_domain_id: default
+blazar_service_user_name: blazar
+blazar_keystone_auth_plugin: password
+
+blazar_service_in_ldap: false
+
+## DB info
+blazar_galera_database: blazar
+blazar_galera_user: blazar
+
+blazar_role_name: admin
+blazar_bind_address: 0.0.0.0
+blazar_service_port: 9800
+blazar_program_name: blazar-server

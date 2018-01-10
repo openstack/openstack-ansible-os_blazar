@@ -1,5 +1,5 @@
 ---
-# Copyright 2018, taseer94@gmail.com
+# Copyright 2017, taseer94@gmail.com
 # All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,16 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: blazar_pre_install.yml
-
-- include: blazar_install.yml
-
-- include: blazar_post_install.yml
-
-- include: blazar_service_setup.yml
-  when: >
-    inventory_hostname == groups['blazar_all'][0]
-
-- include: blazar_db_setup.yml
-  when: >
-    inventory_hostname == groups['blazar_all'][0]
+- name: generate blazar configuration
+  template:
+    src: "{{ item }}"
+    dest: "{{ blazar_conf_dir }}"
+  with_items:
+    - api-paste.ini
+    - policy.json
+    - blazar.conf

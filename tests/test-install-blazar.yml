@@ -1,6 +1,5 @@
 ---
 # Copyright 2018, taseer94@gmail.com
-# All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,16 +13,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: blazar_pre_install.yml
-
-- include: blazar_install.yml
-
-- include: blazar_post_install.yml
-
-- include: blazar_service_setup.yml
-  when: >
-    inventory_hostname == groups['blazar_all'][0]
-
-- include: blazar_db_setup.yml
-  when: >
-    inventory_hostname == groups['blazar_all'][0]
+- name: Playbook for deploying blazar
+  hosts: blazar_all
+  user: root
+  become: true
+  gather_facts: true
+  any_errors_fatal: true
+  pre_tasks:
+    - include: common/create-grant-db.yml
+      db_name: "{{ blazar_galera_database }}"
+      db_password: "{{ blazar_container_mysql_password }}"
+  roles:
+    - role: os_blazar
+  vars_files:
+    - common/test-vars.yml

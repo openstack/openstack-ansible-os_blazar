@@ -14,16 +14,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: blazar_pre_install.yml
-
-- include: blazar_install.yml
-
-- include: blazar_post_install.yml
-
-- include: blazar_service_setup.yml
-  when: >
-    inventory_hostname == groups['blazar_all'][0]
-
-- include: blazar_db_setup.yml
-  when: >
-    inventory_hostname == groups['blazar_all'][0]
+- name: install apt packages
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - git
+    - gcc
+    - python-dev
+    - python-antlr3
+    - libxml2
+    - libxslt1-dev
+    - libzip-dev
+    - build-essential
+    - build-essential
+    - libssl-dev
+    - libffi-dev
+    - python-setuptools
+    - python-mysqldb

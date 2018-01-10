@@ -1,0 +1,27 @@
+---
+# Copyright 2018, taseer94@gmail.com
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+blazar_service_tenant_name: service
+blazar_rabbitmq_port: "{{ rabbitmq_port }}"
+blazar_service_publicuri: "{{ blazar_service_proto }}://{{ hostvars[groups['blazar_all'][0]]['ansible_host'] }}:{{ blazar_service_port }}"
+blazar_service_adminurl: "{{ blazar_service_proto }}://{{ hostvars[groups['blazar_all'][0]]['ansible_host'] }}:{{ blazar_service_port }}"
+blazar_service_adminuri: "{{ blazar_service_proto }}://{{ hostvars[groups['blazar_all'][0]]['ansible_host'] }}:{{ blazar_service_port }}"
+blazar_aodh_enabled: false
+blazar_gnocchi_enabled: false
+blazar_rabbitmq_password: "secrete"
+blazar_service_password: "secrete"
+blazar_container_mysql_password: "secrete"
+blazar_developer_mode: true
+blazar_galera_address: "{{ test_galera_host }}"

@@ -1,6 +1,5 @@
 ---
 # Copyright 2018, taseer94@gmail.com
-# All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,16 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: blazar_pre_install.yml
-
-- include: blazar_install.yml
-
-- include: blazar_post_install.yml
-
-- include: blazar_service_setup.yml
-  when: >
-    inventory_hostname == groups['blazar_all'][0]
-
-- include: blazar_db_setup.yml
-  when: >
-    inventory_hostname == groups['blazar_all'][0]
+- name: Ensure blazar APIs are reachable
+  hosts: blazar_all
+  user: root
+  gather_facts: false
+  tasks:
+    - name: check blazar api
+      uri:
+        url: http://localhost:9900
+        status_code: 200
+      register: result
+      until: result.status == 200
+      retries: 5
+      delay: 10
