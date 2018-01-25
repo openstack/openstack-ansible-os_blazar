@@ -76,6 +76,10 @@ blazar_service_internaluri_proto: "{{ openstack_service_internaluri_proto | defa
 #NOTE:  move password to tests/test-vars.yml
 blazar_service_password: password
 
+## Service name
+blazar_service_names:
+  - "blazar-server"
+
 ## Keystone
 blazar_service_project_domain_id: default
 blazar_service_project_name: service

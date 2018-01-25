@@ -1,0 +1,41 @@
+# {{ ansible_managed }}
+
+# vim:set ft=upstart ts=2 et:
+
+description "{{ blazar_program_name }}"
+
+start on runlevel [2345]
+stop on runlevel [016]
+
+respawn
+respawn limit 10 5
+
+# Set the RUNBIN environment variable
+env RUNBIN="{{ blazar_bin }}/{{ blazar_program_name }}"
+
+# Change directory to service users home
+chdir "{{ blazar_system_user_home }}"
+
+# Pre start actions
+pre-start script
+  mkdir -p "/var/run/{{ blazar_program_name }}"
+  chown {{ blazar_system_user_name }}:{{ blazar_system_group_name }} "/var/run/{{ blazar_program_name }}"
+
+  mkdir -p "/var/lock/{{ blazar_program_name }}"
+  chown {{ blazar_system_user_name }}:{{ blazar_system_group_name }} "/var/lock/{{ blazar_program_name }}"
+
+end script
+
+# Post stop actions
+post-stop script
+  rm "/var/run/{{ blazar_program_name }}/{{ blazar_program_name }}.pid"
+end script
+
+# Run the start up job
+exec start-stop-daemon --start \
+                       --chuid {{ blazar_system_user_name }} \
+                       --make-pidfile \
+                       --pidfile /var/run/{{ blazar_program_name }}/{{ blazar_program_name }}.pid \
+                       --exec "{{ program_override|default('$RUNBIN') }}" \
+                       -- {{ program_config_options|default('') }} \
+                       --log-file=/var/log/blazar/{{ blazar_program_name }}.log

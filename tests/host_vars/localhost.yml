@@ -1,6 +1,5 @@
 ---
-# Copyright 2018, taseer94@gmail.com
-# All rights reserved.
+# Copyright 2017, taseer94@gmail.com
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,12 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Restart blazar services
-  service:
-    name: "{{ item }}"
-    enabled: yes
-    state: restarted
-    pattern: "{{ item }}"
-    daemon_reload: "{{ (ansible_service_mgr == 'systemd') | ternary('yes', omit) }}"
-  with_items: "{{ blazar_service_names }}"
-  failed_when: false
+ansible_connection: local
+ansible_host: 10.1.1.1
+neutron_local_ip:  10.1.2.1
+ansible_python_interpreter: "/usr/bin/python2"
+bridges:
+  - name: "br-mgmt"
+    ip_addr: "10.1.1.1"
+  - name: "br-vxlan"
+    ip_addr: "10.1.2.1"
+  - name: "br-vlan"
+    ip_addr: "10.1.3.1"
+veth_peer: "eth12"

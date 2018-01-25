@@ -14,12 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Restart blazar services
-  service:
-    name: "{{ item }}"
-    enabled: yes
-    state: restarted
-    pattern: "{{ item }}"
-    daemon_reload: "{{ (ansible_service_mgr == 'systemd') | ternary('yes', omit) }}"
-  with_items: "{{ blazar_service_names }}"
-  failed_when: false
+- include: blazar_init_common.yml
+  vars:
+    program_name: "{{ blazar_program_name }}"
+    service_name: "{{ blazar_service_name }}"
+    system_user: "{{ blazar_system_user_name }}"
+    system_group: "{{ blazar_system_group_name }}"
+    service_home: "{{ blazar_system_user_home }}"
+    program_config_options: "{{ blazar_config_options }}"

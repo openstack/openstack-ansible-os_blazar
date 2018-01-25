@@ -1,5 +1,5 @@
 ---
-# Copyright 2018, taseer94@gmail.com
+# Copyright 2017, taseer94@gmail.com
 # All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,12 +14,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Restart blazar services
-  service:
-    name: "{{ item }}"
-    enabled: yes
-    state: restarted
-    pattern: "{{ item }}"
-    daemon_reload: "{{ (ansible_service_mgr == 'systemd') | ternary('yes', omit) }}"
-  with_items: "{{ blazar_service_names }}"
-  failed_when: false
+- name: Place the init script
+  template:
+    src: "blazar-upstart-init.j2"
+    dest: "/etc/init/{{ program_name }}.conf"
+    mode: "0644"
+    owner: "root"
+    group: "root"
+  register: upstart_init
+  notify:
+    - Restart blazar services
+
+- name: Reload init scripts
+  command: initctl reload-configuration
+  when: upstart_init | changed
+  notify:
+    - Restart blazar services

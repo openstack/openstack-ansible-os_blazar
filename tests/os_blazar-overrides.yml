@@ -15,6 +15,9 @@
 
 blazar_service_tenant_name: service
 blazar_rabbitmq_port: "{{ rabbitmq_port }}"
+blazar_rabbitmq_servers: "{{ rabbitmq_servers }}"
+blazar_rabbitmq_host_group: "{{ rabbitmq_host_group }}"
+blazar_rabbitmq_use_ssl: "{{ rabbitmq_use_ssl }}"
 blazar_service_publicuri: "{{ blazar_service_proto }}://{{ hostvars[groups['blazar_all'][0]]['ansible_host'] }}:{{ blazar_service_port }}"
 blazar_service_adminurl: "{{ blazar_service_proto }}://{{ hostvars[groups['blazar_all'][0]]['ansible_host'] }}:{{ blazar_service_port }}"
 blazar_service_adminuri: "{{ blazar_service_proto }}://{{ hostvars[groups['blazar_all'][0]]['ansible_host'] }}:{{ blazar_service_port }}"

@@ -14,12 +14,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Restart blazar services
+- include: blazar_init_upstart.yml
+  when:
+    - ansible_service_mgr == 'init'
+
+- include: blazar_init_systemd.yml
+  when:
+    - ansible_service_mgr == 'systemd'
+
+- name: Load service
   service:
-    name: "{{ item }}"
-    enabled: yes
-    state: restarted
-    pattern: "{{ item }}"
-    daemon_reload: "{{ (ansible_service_mgr == 'systemd') | ternary('yes', omit) }}"
-  with_items: "{{ blazar_service_names }}"
-  failed_when: false
+   name: "{{ program_name }}"
+   enabled: "yes"
+  notify:
+    - Restart blazar services
