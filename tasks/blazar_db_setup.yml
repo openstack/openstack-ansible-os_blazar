@@ -15,8 +15,9 @@
 # limitations under the License.
 
 - name: create blazar database schema
-  command: "{{ blazar_bin }}/blazar-db-manage
-    --config-file {{ blazar_conf_dir }}/blazar.conf upgrade head"
+  command: >
+    {{ blazar_bin }}/blazar-db-manage
+    --config-file {{ blazar_conf_dir }}/blazar.conf upgrade head
   become: yes
   become_user: "{{ blazar_system_user_name }}"
   changed_when: False

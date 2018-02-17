@@ -14,21 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: blazar_apt_packages.yml
-
-- name: install pip packages
-  pip:
-    name: "{{ item }}"
-  with_items:
-    - virtualenv
-
-- name: clone blazar repo
-  git:
-    repo: "{{ blazar_git_repo }}"
-    dest: /opt/blazar
-    clone: yes
-    version: master
-
 - name: create blazar group
   group:
     name: "{{ blazar_system_group_name }}"
@@ -40,10 +25,40 @@
     group: "{{ blazar_system_group_name }}"
     createhome: no
 
-- name: make blazar configuration directory
+- name: Create blazar directories
   file:
-    path: "{{ item }}"
+    path: "{{ item.path }}"
     state: directory
+    owner: "{{ item.owner | default(blazar_system_user_name) }}"
+    group: "{{ item.group | default(blazar_system_group_name) }}"
+    mode: "{{ item.mode | default('0755') }}"
   with_items:
-    - /etc/blazar
-    - /etc/blazar/snapshot
+    - path: "/openstack"
+      mode: "0755"
+      owner: "root"
+      group: "root"
+    - path: "{{ blazar_etc_dir }}"
+      mode: "0755"
+      group: "{{ blazar_system_group_name }}"
+      owner: "{{ blazar_system_user_name }}"
+
+- name: test for log directory or link
+  shell: |
+    if [ -h "/var/log/blazar"  ]; then
+      chown -h {{ blazar_system_user_name }}:{{ blazar_system_group_name }} "/var/log/blazar"
+      chown -R {{ blazar_system_user_name }}:{{ blazar_system_group_name }} "$(readlink /var/log/blazar)"
+    else
+      exit 1
+    fi
+  register: log_dir
+  failed_when: false
+  changed_when: log_dir.rc != 0
+
+- name: Create blazar log dir
+  file:
+    path: "/var/log/blazar/"
+    state: directory
+    owner: "{{ blazar_system_user_name }}"
+    group: "{{ blazar_system_group_name }}"
+    mode: "0755"
+  when: log_dir.rc != 0

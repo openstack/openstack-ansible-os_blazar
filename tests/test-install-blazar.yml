@@ -20,10 +20,18 @@
   gather_facts: true
   any_errors_fatal: true
   pre_tasks:
+    - include: common/ensure-rabbitmq.yml
+      vhost_name: "{{ blazar_rabbitmq_vhost }}"
+      user_name: "{{ cblazar_rabbitmq_userid }}"
+      user_password: "{{ blazar_rabbitmq_password }}"
+      when:
+        - "groups['rabbitmq_all'] is defined"
+
     - include: common/create-grant-db.yml
       db_name: "{{ blazar_galera_database }}"
       db_password: "{{ blazar_container_mysql_password }}"
+
   roles:
-    - role: os_blazar
+    - role: "os_blazar"
   vars_files:
     - common/test-vars.yml

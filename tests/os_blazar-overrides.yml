@@ -13,18 +13,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-blazar_service_tenant_name: service
+# Use the tests repo values
 blazar_rabbitmq_port: "{{ rabbitmq_port }}"
 blazar_rabbitmq_servers: "{{ rabbitmq_servers }}"
 blazar_rabbitmq_host_group: "{{ rabbitmq_host_group }}"
 blazar_rabbitmq_use_ssl: "{{ rabbitmq_use_ssl }}"
-blazar_service_publicuri: "{{ blazar_service_proto }}://{{ hostvars[groups['blazar_all'][0]]['ansible_host'] }}:{{ blazar_service_port }}"
-blazar_service_adminurl: "{{ blazar_service_proto }}://{{ hostvars[groups['blazar_all'][0]]['ansible_host'] }}:{{ blazar_service_port }}"
-blazar_service_adminuri: "{{ blazar_service_proto }}://{{ hostvars[groups['blazar_all'][0]]['ansible_host'] }}:{{ blazar_service_port }}"
-blazar_aodh_enabled: false
-blazar_gnocchi_enabled: false
+blazar_galera_address: "{{ test_galera_host }}"
+
+# Required settings with no defaults
 blazar_rabbitmq_password: "secrete"
 blazar_service_password: "secrete"
 blazar_container_mysql_password: "secrete"
+
+# Force dev mode for the role test
 blazar_developer_mode: true
-blazar_galera_address: "{{ test_galera_host }}"
+
+# The defaults use to the LB address, so we need to
+# override them to the container address.
+blazar_service_publicuri: "{{ blazar_service_proto }}://{{ hostvars[groups['blazar_all'][0]]['ansible_host'] }}:{{ blazar_service_port }}"
+blazar_service_internaluri: "{{ blazar_service_publicuri }}"
+blazar_service_adminuri: "{{ blazar_service_publicuri }}"

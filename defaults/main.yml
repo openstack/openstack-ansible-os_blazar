@@ -97,3 +97,7 @@ blazar_role_name: admin
 blazar_bind_address: 0.0.0.0
 blazar_service_port: 9800
 blazar_program_name: blazar-server
+
+## Tunable overrides
+blazar_blazar_api_paste_ini_overrides: {}
+blazar_blazar_conf_overrides: {}

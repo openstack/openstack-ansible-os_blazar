@@ -14,11 +14,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: generate blazar configuration
-  template:
-    src: "{{ item }}"
-    dest: "{{ blazar_conf_dir }}"
+- name: Deploy configuration files
+  config_template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "root"
+    group: "{{ blazar_system_group_name }}"
+    mode: "0640"
+    config_overrides: "{{ item.config_overrides }}"
+    config_type: "{{ item.config_type }}"
   with_items:
-    - api-paste.ini
-    - policy.json
-    - blazar.conf
+    - src: "blazar.conf.j2"
+      dest: "{{ blazar_etc_dir }}/blazar.conf"
+      config_overrides: "{{ blazar_blazar_conf_overrides }}"
+      config_type: "ini"
+  notify:
+    - Restart blazar services

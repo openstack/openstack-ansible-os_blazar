@@ -1,0 +1,15 @@
+[DEFAULT]
+host=0.0.0.0
+port={{ blazar_service_port }}
+
+[manager]
+plugins=physical.host.plugin,virtual.instance.plugin
+
+[keystone_authtoken]
+auth_type={{ blazar_keystone_auth_plugin }}
+project_domain_name={{ blazar_service_project_domain_id }}
+project_name={{ blazar_service_user_domain_id }}
+user_domain_name={{ blazar_service_user_domain_id }}
+username={{ blazar_service_user_name }}
+password={{ blazar_service_password }}
+auth_url={{ keystone_service_adminuri }}

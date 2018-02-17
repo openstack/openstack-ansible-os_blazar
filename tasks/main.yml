@@ -14,16 +14,42 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+- name: Gather variables for each operating system
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version | lower }}.yml"
+    - "{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
+    - "{{ ansible_os_family | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
+    - "{{ ansible_distribution | lower }}.yml"
+    - "{{ ansible_os_family | lower }}-{{ ansible_distribution_version.split('.')[0] }}.yml"
+    - "{{ ansible_os_family | lower }}.yml"
+  tags:
+    - always
+
 - include: blazar_pre_install.yml
+  tags:
+    - blazar-install
 
 - include: blazar_install.yml
+  tags:
+    - blazar-install
 
 - include: blazar_post_install.yml
+  tags:
+    - blazar-config
 
-- include: blazar_service_setup.yml
-  when: >
-    inventory_hostname == groups['blazar_all'][0]
+- include: "blazar_init_{{ ansible_service_mgr }}.yml"
+  tags:
+    - blazar-config
 
 - include: blazar_db_setup.yml
-  when: >
-    inventory_hostname == groups['blazar_all'][0]
+  when:
+    - "inventory_hostname == ((groups['blazar']| intersect(ansible_play_hosts)) | list)[0]"
+  tags:
+    - blazar-config
+
+- include: blazar_service_setup.yml
+  when:
+    - "inventory_hostname == ((groups['blazar']| intersect(ansible_play_hosts)) | list)[0]"
+  tags:
+    - blazar-config
