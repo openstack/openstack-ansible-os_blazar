@@ -13,3 +13,6 @@ user_domain_name={{ blazar_service_user_domain_id }}
 username={{ blazar_service_user_name }}
 password={{ blazar_service_password }}
 auth_url={{ keystone_service_adminuri }}
+
+[database]
+connection = mysql+pymysql://{{ blazar_galera_user }}:{{ blazar_container_mysql_password }}@{{ blazar_galera_address }}/{{ blazar_galera_database }}?charset=utf8{% if blazar_galera_use_ssl | bool %}&ssl_ca={{ blazar_galera_ssl_ca_cert }}{% endif %}

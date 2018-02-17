@@ -26,9 +26,8 @@ blazar_venv_tag: untagged
 blazar_bin: "/openstack/venvs/blazar-{{ blazar_venv_tag }}/bin"
 
 blazar_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/blazar.tgz
-
-blazar_etc_dir: "{{ blazar_bin | dirname }}/etc/blazar"
-blazar_conf_dir: /etc/blazar
+blazar_etc_dir: /etc/blazar
+blazar_config_option: "--config-file {{ blazar_etc_dir }}/blazar.conf"
 
 ## Required PIP packages
 blazar_requires_pip_packages:
@@ -77,8 +76,11 @@ blazar_service_internaluri_proto: "{{ openstack_service_internaluri_proto | defa
 blazar_service_password: password
 
 ## Service name
-blazar_service_names:
-  - "blazar-server"
+blazar_service:
+  blazar-api:
+    service_name: blazar-api
+  blazar-manager:
+    service_name: blazar-manager
 
 ## Keystone
 blazar_service_project_domain_id: default
