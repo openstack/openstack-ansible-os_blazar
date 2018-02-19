@@ -14,20 +14,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: install apt packages
-  apt:
-    name: "{{ item }}"
-  with_items:
-    - git
-    - gcc
-    - python-dev
-    - python-antlr3
-    - libxml2
-    - libxslt1-dev
-    - libzip-dev
-    - build-essential
-    - build-essential
-    - libssl-dev
-    - libffi-dev
-    - python-setuptools
-    - python-mysqldb
+blazar_distro_packages:
+  - git
+  - gcc
+  - python-dev
+  - python-antlr3
+  - libxml2
+  - libxslt1-dev
+  - libzip-dev
+  - build-essential
+  - build-essential
+  - libssl-dev
+  - libffi-dev
+  - python-setuptools
+  - python-mysqldb
