@@ -37,9 +37,14 @@ blazar_requires_pip_packages:
   - virtualenv-tools
   - python-keystoneclient
 
+## Common PIP requirements
+blazar_pip_packages:
+  - blazar
+  - python-blazarclient
+
 ## blazar developer constraint
 blazar_developer_constraints:
-  -  - "git+{{ blazar_git_repo }}@{{ blazar_git_install_branch }}#egg=blazar"
+  - "git+{{ blazar_git_repo }}@{{ blazar_git_install_branch }}#egg=blazar"
 
 ## System info
 blazar_system_user_name: blazar
