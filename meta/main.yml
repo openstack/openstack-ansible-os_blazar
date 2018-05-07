@@ -18,7 +18,7 @@
 galaxy_info:
   author: Taseer Ahmed
   email: taseer94@gmail.com
-  description: Congress deployment with OpenStack Ansible
+  description: Blazar deployment with OpenStack Ansible
   company: Independent
   license: Apache2
   min_ansible_version: 2.3
