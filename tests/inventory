@@ -13,6 +13,9 @@ infra1
 [memcached_all]
 infra1
 
+[rabbitmq_all]
+infra1
+
 [service_all:children]
 galera_all
 memcached_all
