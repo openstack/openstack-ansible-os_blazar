@@ -68,12 +68,12 @@
 
 - include_tasks: blazar_db_setup.yml
   when:
-    - "inventory_hostname == ((groups['blazar']| intersect(ansible_play_hosts)) | list)[0]"
+    - "inventory_hostname == ((groups['blazar_all']| intersect(ansible_play_hosts)) | list)[0]"
   tags:
     - blazar-config
 
 - include_tasks: blazar_service_setup.yml
   when:
-    - "inventory_hostname == ((groups['blazar']| intersect(ansible_play_hosts)) | list)[0]"
+    - "inventory_hostname == ((groups['blazar_all']| intersect(ansible_play_hosts)) | list)[0]"
   tags:
     - blazar-config

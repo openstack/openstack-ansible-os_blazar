@@ -1,11 +1,16 @@
 [all]
 localhost
 infra1
+openstack1
 blazar1
 
 [all_containers]
 infra1
+openstack1
 blazar1
+
+[rabbitmq_all]
+infra1
 
 [galera_all]
 infra1
@@ -13,21 +18,16 @@ infra1
 [memcached_all]
 infra1
 
-[rabbitmq_all]
-infra1
-
 [service_all:children]
+rabbitmq_all
 galera_all
 memcached_all
 
 [keystone_all]
-infra1
-
-[blazar_all]
-blazar1
+openstack1
 
 [utility_all]
-blazar1
+openstack1
 
 [blazar_all]
 blazar1

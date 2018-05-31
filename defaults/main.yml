@@ -42,6 +42,9 @@ blazar_pip_install_args: >-
 blazar_venv_tag: "{{ venv_tag | default('untagged') }}"
 blazar_bin: "/openstack/venvs/blazar-{{ blazar_venv_tag }}/bin"
 
+# venv_download, even when true, will use the fallback method of building the
+# venv from scratch if the venv download fails.
+blazar_venv_download: "{{ not blazar_developer_mode | bool }}"
 blazar_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/blazar.tgz
 blazar_etc_dir: /etc/blazar
 blazar_config_option: "--config-file {{ blazar_etc_dir }}/blazar.conf"
@@ -49,7 +52,9 @@ blazar_config_option: "--config-file {{ blazar_etc_dir }}/blazar.conf"
 ## Common PIP requirements
 blazar_pip_packages:
   - blazar
+  - blazar-nova
   - osprofiler
+  - pymysql
   - python-blazarclient
   - systemd-python
 
@@ -69,10 +74,12 @@ blazar_db_setup_host: "{{ ('galera_all' in groups) | ternary(groups['galera_all'
 blazar_galera_address: "{{ galera_address | default('127.0.0.1') }}"
 blazar_galera_database: blazar
 blazar_galera_user: blazar
+blazar_galera_use_ssl: "{{ galera_use_ssl | default(False) }}"
+blazar_galera_ssl_ca_cert: "{{ galera_ssl_ca_cert | default('/etc/ssl/certs/galera-ca.pem') }}"
 
 ## Service Type and Data
-blazar_service_region: RegionOne
 blazar_service_name: blazar
+blazar_service_region: RegionOne
 blazar_service_proto: http
 blazar_service_type: policy
 blazar_service_description: "blazar service"
@@ -97,11 +104,13 @@ blazar_services:
     service_name: blazar-api
     execstarts: "{{ blazar_bin }}/blazar-api {{ blazar_config_option }}"
     init_config_overrides: "{{ blazar_api_init_config_overrides }}"
+    start_order: 1
   blazar-manager:
     group: blazar_all
     service_name: blazar-manager
     execstarts: "{{ blazar_bin }}/blazar-manager {{ blazar_config_option }}"
     init_config_overrides: "{{ blazar_manager_init_config_overrides }}"
+    start_order: 2
 
 ## Keystone
 blazar_service_project_domain_id: default
@@ -112,9 +121,28 @@ blazar_keystone_auth_plugin: password
 
 blazar_service_in_ldap: false
 
+## Oslo Messaging
+blazar_messaging_enabled: true
+
+# RPC
+blazar_oslomsg_rpc_transport: rabbit
+blazar_oslomsg_rpc_servers: 127.0.0.1
+blazar_oslomsg_rpc_port: 5672
+blazar_oslomsg_rpc_use_ssl: False
+blazar_oslomsg_rpc_userid: blazar
+keystone_oslomsg_rpc_vhost: /blazar
+
+# Notify
+blazar_oslomsg_notify_transport: rabbit
+blazar_oslomsg_notify_servers: 127.0.0.1
+blazar_oslomsg_notify_port: 5672
+blazar_oslomsg_notify_use_ssl: False
+blazar_oslomsg_notify_userid: blazar
+blazar_oslomsg_notify_vhost: /blazar
+
 blazar_role_name: admin
 blazar_bind_address: 0.0.0.0
-blazar_service_port: 9800
+blazar_service_port: 1234
 blazar_program_name: blazar-server
 
 ## Tunable overrides
