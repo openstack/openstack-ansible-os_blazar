@@ -16,13 +16,13 @@
 - name: Ensure blazar APIs are reachable
   hosts: blazar_all
   user: root
-  gather_facts: false
+  gather_facts: False
   tasks:
     - name: check blazar api
       uri:
-        url: http://localhost:9900
-        status_code: 200
+        url: http://localhost:1234
+        status_code: 204
       register: result
-      until: result.status == 200
+      until: result.status == 204
       retries: 5
       delay: 10

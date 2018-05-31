@@ -29,7 +29,7 @@ galaxy_info:
   galaxy_tags:
     - cloud
     - python
-    - congress
+    - blazar
     - development
     - openstack
 dependencies:
