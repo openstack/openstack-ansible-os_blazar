@@ -8,3 +8,6 @@ The documentation for the role can also be found at
 
 Release notes for the project can be found at:
 `<https://docs.openstack.org/releasenotes/openstack-ansible-os_blazar/>`_
+
+The project home is at:
+  http://launchpad.net/openstack-ansible
