@@ -14,7 +14,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: create blazar database schema
+- name: Create DB for service
+  mysql_db:
+    login_user: "{{ galera_root_user }}"
+    login_password: "{{ galera_root_password }}"
+    login_host: "{{ blazar_galera_address }}"
+    name: "{{ blazar_galera_database }}"
+    state: "present"
+  delegate_to: "{{ blazar_db_setup_host }}"
+  no_log: True
+
+- name: Grant access to the DB for the service
+  mysql_user:
+    login_user: "{{ galera_root_user }}"
+    login_password: "{{ galera_root_password }}"
+    login_host: "{{ blazar_galera_address }}"
+    name: "{{ blazar_galera_user }}"
+    password: "{{ blazar_container_mysql_password }}"
+    host: "{{ item }}"
+    state: "present"
+    priv: "{{ blazar_galera_database }}.*:ALL"
+  delegate_to: "{{ blazar_db_setup_host }}"
+  with_items:
+    - "localhost"
+    - "%"
+  no_log: True
+
+- name: Create blazar database schema
   command: >
     {{ blazar_bin }}/blazar-db-manage
     --config-file {{ blazar_conf_dir }}/blazar.conf upgrade head

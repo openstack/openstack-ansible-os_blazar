@@ -27,10 +27,6 @@
       when:
         - "groups['rabbitmq_all'] is defined"
 
-    - include: common/create-grant-db.yml
-      db_name: "{{ blazar_galera_database }}"
-      db_password: "{{ blazar_container_mysql_password }}"
-
   roles:
     - role: "os_blazar"
   vars_files:
