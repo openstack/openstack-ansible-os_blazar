@@ -40,6 +40,7 @@ blazar_requires_pip_packages:
 ## Common PIP requirements
 blazar_pip_packages:
   - blazar
+  - osprofiler
   - python-blazarclient
 
 ## blazar developer constraint
