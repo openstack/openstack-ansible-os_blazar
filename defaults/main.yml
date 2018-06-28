@@ -55,12 +55,10 @@ blazar_system_comment: blazar system user
 blazar_system_user_home: "/var/lib/{{ blazar_system_user_name }}"
 
 ## Database credentials
-blazar_db_name: blazar
-blazar_db_user: root
-blazar_db_login_host: ""
-blazar_db_login_user: ""
-blazar_db_login_password: ""
-blazar_db_user_password: ""
+blazar_db_setup_host: "{{ ('galera_all' in groups) | ternary(groups['galera_all'][0], 'localhost') }}"
+blazar_galera_address: "{{ galera_address | default('127.0.0.1') }}"
+blazar_galera_database: blazar
+blazar_galera_user: blazar
 
 ## Service Type and Data
 blazar_service_region: RegionOne
@@ -97,10 +95,6 @@ blazar_service_user_name: blazar
 blazar_keystone_auth_plugin: password
 
 blazar_service_in_ldap: false
-
-## DB info
-blazar_galera_database: blazar
-blazar_galera_user: blazar
 
 blazar_role_name: admin
 blazar_bind_address: 0.0.0.0
