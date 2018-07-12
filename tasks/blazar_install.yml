@@ -21,7 +21,7 @@
     update_cache: "{{ (ansible_pkg_mgr in ['apt', 'zypper']) | ternary('yes', omit) }}"
     cache_valid_time: "{{ (ansible_pkg_mgr == 'apt') | ternary(cache_timeout, omit) }}"
   register: install_packages
-  until: install_packages | success
+  until: install_packages is success
   retries: 5
   delay: 2
 
@@ -43,7 +43,7 @@
       {{ (pip_install_upper_constraints is defined) | ternary('--constraint ' + pip_install_upper_constraints | default(''),'') }}
       {{ pip_install_options | default('') }}
   register: install_packages
-  until: install_packages|success
+  until: install_packages is success
   retries: 5
   delay: 2
 
@@ -66,21 +66,21 @@
   file:
     path: "{{ blazar_bin | dirname }}"
     state: absent
-  when: blazar_get_venv | changed
+  when: blazar_get_venv is changed
 
 - name: Create blazar venv dir
   file:
     path: "{{ blazar_bin | dirname }}"
     state: directory
   register: blazar_venv_dir
-  when: blazar_get_venv | changed
+  when: blazar_get_venv is changed
 
 - name: Unarchive pre-built venv
   unarchive:
     src: "/var/cache/{{ blazar_venv_download_url | basename }}"
     dest: "{{ blazar_bin | dirname }}"
     copy: "no"
-  when: blazar_get_venv | changed
+  when: blazar_get_venv is changed
   notify:
     - Restart blazar services
 
@@ -95,10 +95,10 @@
       {{ (pip_install_upper_constraints is defined) | ternary('--constraint ' + pip_install_upper_constraints | default(''),'') }}
       {{ pip_install_options | default('') }}
   register: install_packages
-  until: install_packages|success
+  until: install_packages is success
   retries: 5
   delay: 2
-  when: blazar_get_venv | failed or blazar_get_venv | skipped
+  when: blazar_get_venv is failed or blazar_get_venv is skipped
   notify:
     - Restart blazar services
 
@@ -108,14 +108,14 @@
     state: "absent"
   when:
     - ansible_pkg_mgr in ['yum', 'dnf', 'zypper']
-    - blazar_get_venv | changed
+    - blazar_get_venv is changed
 
 - name: Update virtualenv path
   shell: |
     find {{ blazar_bin }} -name \*.pyc -delete
     sed -si '1s/^.*python.*$/#!{{ blazar_bin | replace ('/','\/') }}\/python/' {{ blazar_bin }}/*
     virtualenv {{ blazar_bin | dirname }}
-  when: blazar_get_venv | changed
+  when: blazar_get_venv is changed
 
 - name: Record the venv tag deployed
   ini_file:
