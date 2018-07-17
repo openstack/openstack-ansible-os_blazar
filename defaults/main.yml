@@ -14,6 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Set the host which will execute the shade modules
+# for the service setup. The host must already have
+# clouds.yaml properly configured.
+blazar_service_setup_host: "{{ openstack_service_setup_host | default('localhost') }}"
+
 blazar_package_state: latest
 blazar_pip_package_state: latest
 
@@ -29,13 +34,6 @@ blazar_bin: "/openstack/venvs/blazar-{{ blazar_venv_tag }}/bin"
 blazar_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/blazar.tgz
 blazar_etc_dir: /etc/blazar
 blazar_config_option: "--config-file {{ blazar_etc_dir }}/blazar.conf"
-
-## Required PIP packages
-blazar_requires_pip_packages:
-  - tox
-  - virtualenv
-  - virtualenv-tools
-  - python-keystoneclient
 
 ## Common PIP requirements
 blazar_pip_packages:
