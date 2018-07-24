@@ -14,16 +14,16 @@
 # limitations under the License.
 
 # Setup the host
-- include: common/test-setup-host.yml
+- import_playbook: common/test-setup-host.yml
 
 # Install RabbitMQ/MariaDB
-- include: common/test-install-infra.yml
+- import_playbook: common/test-install-infra.yml
 
 # Install Keystone
-- include: common/test-install-keystone.yml
+- import_playbook: common/test-install-keystone.yml
 
 # Install Blazar Installation
-- include: test-install-blazar.yml
+- import_playbook: test-install-blazar.yml
 
 # Test Blazar Functional
-- include: test-blazar-functional.yml
+- import_playbook: test-blazar-functional.yml
