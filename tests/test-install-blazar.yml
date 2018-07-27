@@ -18,14 +18,6 @@
   user: root
   gather_facts: true
   any_errors_fatal: true
-  pre_tasks:
-    - include: common/ensure-rabbitmq.yml
-      vhost_name: "{{ blazar_rabbitmq_vhost }}"
-      user_name: "{{ cblazar_rabbitmq_userid }}"
-      user_password: "{{ blazar_rabbitmq_password }}"
-      when:
-        - "groups['rabbitmq_all'] is defined"
-
   roles:
     - role: "os_blazar"
   vars_files:

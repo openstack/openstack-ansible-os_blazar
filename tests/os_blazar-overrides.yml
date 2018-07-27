@@ -14,14 +14,9 @@
 # limitations under the License.
 
 # Use the tests repo values
-blazar_rabbitmq_port: "{{ rabbitmq_port }}"
-blazar_rabbitmq_servers: "{{ rabbitmq_servers }}"
-blazar_rabbitmq_host_group: "{{ rabbitmq_host_group }}"
-blazar_rabbitmq_use_ssl: "{{ rabbitmq_use_ssl }}"
 blazar_galera_address: "{{ test_galera_host }}"
 
 # Required settings with no defaults
-blazar_rabbitmq_password: "secrete"
 blazar_service_password: "secrete"
 blazar_container_mysql_password: "secrete"
 
