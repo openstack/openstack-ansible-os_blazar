@@ -40,6 +40,7 @@ blazar_pip_packages:
   - blazar
   - osprofiler
   - python-blazarclient
+  - systemd-python
 
 ## blazar developer constraint
 blazar_developer_constraints:
@@ -79,11 +80,17 @@ blazar_service_internaluri_proto: "{{ openstack_service_internaluri_proto | defa
 blazar_service_password: password
 
 ## Service name
-blazar_service:
+blazar_services:
   blazar-api:
+    group: blazar_all
     service_name: blazar-api
+    execstarts: "{{ blazar_bin }}/blazar-api {{ blazar_config_option }}"
+    init_config_overrides: "{{ blazar_api_init_config_overrides }}"
   blazar-manager:
+    group: blazar_all
     service_name: blazar-manager
+    execstarts: "{{ blazar_bin }}/blazar-manager {{ blazar_config_option }}"
+    init_config_overrides: "{{ blazar_manager_init_config_overrides }}"
 
 ## Keystone
 blazar_service_project_domain_id: default
@@ -102,3 +109,5 @@ blazar_program_name: blazar-server
 ## Tunable overrides
 blazar_blazar_api_paste_ini_overrides: {}
 blazar_blazar_conf_overrides: {}
+blazar_api_init_config_overrides: {}
+blazar_manager_init_config_overrides: {}

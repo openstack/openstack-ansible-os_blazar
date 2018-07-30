@@ -15,11 +15,8 @@
 # limitations under the License.
 
 - name: Restart blazar services
-  service:
-    name: "{{ item }}"
-    enabled: yes
+  systemd:
+    name: "{{ item.service_name }}"
     state: restarted
-    pattern: "{{ item }}"
-    daemon_reload: "{{ (ansible_service_mgr == 'systemd') | ternary('yes', omit) }}"
-  with_items: "{{ blazar_service_names }}"
+  with_items: "{{ filtered_blazar_services }}"
   failed_when: false

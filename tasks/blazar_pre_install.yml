@@ -41,24 +41,3 @@
       mode: "0755"
       group: "{{ blazar_system_group_name }}"
       owner: "{{ blazar_system_user_name }}"
-
-- name: test for log directory or link
-  shell: |
-    if [ -h "/var/log/blazar"  ]; then
-      chown -h {{ blazar_system_user_name }}:{{ blazar_system_group_name }} "/var/log/blazar"
-      chown -R {{ blazar_system_user_name }}:{{ blazar_system_group_name }} "$(readlink /var/log/blazar)"
-    else
-      exit 1
-    fi
-  register: log_dir
-  failed_when: false
-  changed_when: log_dir.rc != 0
-
-- name: Create blazar log dir
-  file:
-    path: "/var/log/blazar/"
-    state: directory
-    owner: "{{ blazar_system_user_name }}"
-    group: "{{ blazar_system_group_name }}"
-    mode: "0755"
-  when: log_dir.rc != 0

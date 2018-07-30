@@ -28,3 +28,9 @@ blazar_distro_packages:
   - libffi-dev
   - python-setuptools
   - python-mysqldb
+  - python-systemd
+
+almanach_developer_mode_distro_packages:
+  - build-essential
+  - libsystemd-dev
+  - pkg-config
