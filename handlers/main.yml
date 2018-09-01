@@ -19,4 +19,7 @@
     name: "{{ item.service_name }}"
     state: restarted
   with_items: "{{ filtered_blazar_services }}"
-  failed_when: false
+  retries: 5
+  delay: 2
+  listen:
+    - "venv changed"

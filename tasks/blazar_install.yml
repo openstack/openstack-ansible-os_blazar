@@ -14,29 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Install distro packages
-  package:
-    name: "{{ blazar_distro_packages }}"
-    state: "{{ blazar_package_state }}"
-    update_cache: "{{ (ansible_pkg_mgr in ['apt', 'zypper']) | ternary('yes', omit) }}"
-    cache_valid_time: "{{ (ansible_pkg_mgr == 'apt') | ternary(cache_timeout, omit) }}"
-  register: install_packages
-  until: install_packages is success
-  retries: 5
-  delay: 2
-
-- name: Install distro packages
-  package:
-    name: "{{ almanach_developer_mode_distro_packages }}"
-    state: "{{ blazar_package_state }}"
-    update_cache: "{{ (ansible_pkg_mgr in ['apt', 'zypper']) | ternary('yes', omit) }}"
-    cache_valid_time: "{{ (ansible_pkg_mgr == 'apt') | ternary(cache_timeout, omit) }}"
-  when: blazar_developer_mode | bool
-  register: install_packages
-  until: install_packages is success
-  retries: 5
-  delay: 2
-
+# TODO(odyssey4me):
+# This can be simplified once all the roles are using
+# python_venv_build. We can then switch to using a
+# set of constraints in pip.conf inside the venv,
+# perhaps prepared by giving a giving a list of
+# constraints to the role.
 - name: Create developer mode constraint file
   copy:
     dest: "/opt/developer-pip-constraints.txt"
@@ -46,79 +29,23 @@
       {% endfor %}
   when: blazar_developer_mode | bool
 
-- name: Retrieve checksum for venv download
-  uri:
-    url: "{{ blazar_venv_download_url | replace('tgz', 'checksum') }}"
-    return_content: yes
-  register: blazar_venv_checksum
-  when: blazar_venv_download | bool
-
-- name: Attempt venv download
-  get_url:
-    url: "{{ blazar_venv_download_url }}"
-    dest: "/var/cache/{{ blazar_venv_download_url | basename }}"
-    checksum: "sha1:{{ blazar_venv_checksum.content | trim }}"
-  register: blazar_get_venv
-  when: blazar_venv_download | bool
-
-- name: Remove existing venv
-  file:
-    path: "{{ blazar_bin | dirname }}"
-    state: absent
-  when: blazar_get_venv is changed
-
-- name: Create blazar venv dir
-  file:
-    path: "{{ blazar_bin | dirname }}"
-    state: directory
-  register: blazar_venv_dir
-  when: blazar_get_venv is changed
-
-- name: Unarchive pre-built venv
-  unarchive:
-    src: "/var/cache/{{ blazar_venv_download_url | basename }}"
-    dest: "{{ blazar_bin | dirname }}"
-    copy: "no"
-  when: blazar_get_venv is changed
-  notify:
-    - Restart blazar services
-
-- name: Install pip packages
-  pip:
-    name: "{{ blazar_pip_packages | join(' ') }}"
-    state: "{{ blazar_pip_package_state }}"
-    virtualenv: "{{ blazar_bin | dirname }}"
-    virtualenv_site_packages: "no"
-    extra_args: >-
-      {{ blazar_developer_mode | ternary(pip_install_developer_constraints | default('--constraint /opt/developer-pip-constraints.txt'), '') }}
-      {{ (pip_install_upper_constraints is defined) | ternary('--constraint ' + pip_install_upper_constraints | default(''),'') }}
-      {{ pip_install_options | default('') }}
-  register: install_packages
-  until: install_packages is success
-  retries: 5
-  delay: 2
-  when: blazar_get_venv is failed or blazar_get_venv is skipped
-  notify:
-    - Restart blazar services
-
-- name: Remove python from path first (CentOS, openSUSE)
-  file:
-    path:  "{{ blazar_bin | dirname }}/bin/python2.7"
-    state: "absent"
+- name: Ensure remote wheel building is disabled in developer mode
+  set_fact:
+    venv_build_host: "{{ ansible_hostname }}"
   when:
-    - ansible_pkg_mgr in ['yum', 'dnf', 'zypper']
-    - blazar_get_venv is changed
+    - blazar_developer_mode | bool
 
-- name: Update virtualenv path
-  shell: |
-    find {{ blazar_bin }} -name \*.pyc -delete
-    sed -si '1s/^.*python.*$/#!{{ blazar_bin | replace ('/','\/') }}\/python/' {{ blazar_bin }}/*
-    virtualenv {{ blazar_bin | dirname }}
-  when: blazar_get_venv is changed
-
-- name: Record the venv tag deployed
-  ini_file:
-    dest: "/etc/ansible/facts.d/openstack_ansible.fact"
-    section: blazar
-    option: venv_tag
-    value: "{{ blazar_venv_tag }}"
+- name: Install the python venv
+  include_role:
+    name: "python_venv_build"
+    private: yes
+  vars:
+    venv_build_distro_package_list: "{{ blazar_devel_distro_packages }}"
+    venv_install_destination_path: "{{ blazar_bin | dirname }}"
+    venv_install_distro_package_list: "{{ blazar_distro_packages }}"
+    venv_pip_install_args: "{{ blazar_pip_install_args }}"
+    venv_pip_packages: "{{ blazar_pip_packages }}"
+    venv_facts_when_changed:
+      - section: "blazar"
+        option: "venv_tag"
+        value: "{{ blazar_venv_tag }}"

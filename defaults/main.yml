@@ -28,7 +28,18 @@ blazar_developer_mode: false
 blazar_requirements_git_repo: https://git.openstack.org/openstack/requirements
 blazar_requirements_git_install_branch: master
 
-blazar_venv_tag: untagged
+# TODO(odyssey4me):
+# This can be simplified once all the roles are using
+# python_venv_build. We can then switch to using a
+# set of constraints in pip.conf inside the venv,
+# perhaps prepared by giving a giving a list of
+# constraints to the role.
+blazar_pip_install_args: >-
+  {{ blazar_developer_mode | ternary(pip_install_developer_constraints | default('--constraint /opt/developer-pip-constraints.txt'), '') }}
+  {{ (pip_install_upper_constraints is defined) | ternary('--constraint ' + pip_install_upper_constraints | default(''), '') }}
+  {{ pip_install_options | default('') }}
+
+blazar_venv_tag: "{{ venv_tag | default('untagged') }}"
 blazar_bin: "/openstack/venvs/blazar-{{ blazar_venv_tag }}/bin"
 
 blazar_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/blazar.tgz
