@@ -15,12 +15,12 @@
 
 # Use the tests repo values
 blazar_galera_address: "{{ test_galera_host }}"
-blazar_rabbitmq_vhost: /blazar
-blazar_rabbitmq_userid: blazar
 
 # Required settings with no defaults
 blazar_service_password: "secrete"
 blazar_container_mysql_password: "secrete"
+blazar_oslomsg_rpc_password: "secrete"
+blazar_oslomsg_notify_password: "secrete"
 
 # Force dev mode for the role test
 blazar_developer_mode: true
