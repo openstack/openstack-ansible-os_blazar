@@ -139,8 +139,9 @@ blazar_oslomsg_notify_transport: "{{ oslomsg_notify_transport | default('rabbit'
 blazar_oslomsg_notify_servers: "{{ oslomsg_notify_servers | default('127.0.0.1') }}"
 blazar_oslomsg_notify_port: "{{ oslomsg_notify_port | default('5672') }}"
 blazar_oslomsg_notify_use_ssl: "{{ oslomsg_notify_use_ssl | default(False) }}"
-blazar_oslomsg_notify_userid: blazar
-blazar_oslomsg_notify_vhost: /blazar
+blazar_oslomsg_notify_userid: "{{ blazar_oslomsg_rpc_userid }}"
+blazar_oslomsg_notify_vhost: "{{ blazar_oslomsg_rpc_vhost }}"
+blazar_oslomsg_notify_password: "{{ blazar_oslomsg_rpc_password }}"
 
 blazar_role_name: admin
 blazar_bind_address: 0.0.0.0
