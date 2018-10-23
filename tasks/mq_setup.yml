@@ -12,9 +12,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
- # WARNING:
+
+# WARNING:
 # This file is maintained in the openstack-ansible-tests repository.
-# https://git.openstack.org/cgit/openstack/openstack-ansible-tests/tree/sync/mq_setup.yml
+# https://git.openstack.org/cgit/openstack/openstack-ansible-tests/tree/sync/tasks/mq_setup.yml
 # If you need to modify this file, update the one in the openstack-ansible-tests
 # repository. Once it merges there, the changes will automatically be proposed to
 # all the repositories which use it.
