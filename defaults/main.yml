@@ -26,6 +26,9 @@ blazar_git_repo: https://git.openstack.org/openstack/blazar
 blazar_git_install_branch: master
 blazar_developer_mode: false
 
+# Enable/Disable Ceilometer
+blazar_ceilometer_enabled: False
+
 # TODO(odyssey4me):
 # This can be simplified once all the roles are using
 # python_venv_build. We can then switch to using a
