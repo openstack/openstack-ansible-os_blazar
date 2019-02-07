@@ -11,7 +11,7 @@ transport_url = {{ blazar_oslomsg_rpc_transport }}://{% for host in blazar_oslom
 ssl = {{ blazar_oslomsg_notify_use_ssl | bool }}
 
 [oslo_messaging_notifications]
-driver = {% if blazar_ceilometer_enabled %}messagingv2{% else %}noop{% endif %}
+driver = {{ (blazar_ceilometer_enabled | bool) | ternary('messagingv2', 'noop') }}
 transport_url = {{ blazar_oslomsg_notify_transport }}://{% for host in blazar_oslomsg_notify_servers.split(',') %}{{ blazar_oslomsg_notify_userid }}:{{ blazar_oslomsg_notify_password }}@{{ host }}:{{ blazar_oslomsg_notify_port }}{% if not loop.last %},{% else %}/{{ blazar_oslomsg_notify_vhost }}{% if (blazar_oslomsg_notify_use_ssl | lower) | bool %}?ssl=1{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
 
 
