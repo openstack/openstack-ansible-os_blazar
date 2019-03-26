@@ -21,8 +21,8 @@
     - name: check blazar api
       uri:
         url: http://localhost:1234
-        status_code: 204
+        status_code: 401
       register: result
-      until: result.status == 204
+      until: result.status == 401
       retries: 5
       delay: 10
