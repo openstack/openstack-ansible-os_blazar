@@ -30,7 +30,20 @@
   tags:
     - blazar-install
 
-- include_tasks: blazar_install.yml
+- name: Install the python venv
+  import_role:
+    name: "python_venv_build"
+  vars:
+    venv_build_constraints: "{{ blazar_git_constraints }}"
+    venv_build_distro_package_list: "{{ blazar_devel_distro_packages }}"
+    venv_install_destination_path: "{{ blazar_bin | dirname }}"
+    venv_install_distro_package_list: "{{ blazar_distro_packages }}"
+    venv_pip_install_args: "{{ blazar_pip_install_args }}"
+    venv_pip_packages: "{{ blazar_pip_packages }}"
+    venv_facts_when_changed:
+      - section: "blazar"
+        option: "venv_tag"
+        value: "{{ blazar_venv_tag }}"
   tags:
     - blazar-install
 

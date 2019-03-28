@@ -25,29 +25,16 @@ blazar_pip_package_state: latest
 
 blazar_git_repo: https://git.openstack.org/openstack/blazar
 blazar_git_install_branch: master
-blazar_developer_mode: false
+blazar_upper_constraints_url: "{{ requirements_git_url | default('https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt?h=' ~ requirements_git_install_branch | default('master')) }}"
 
 # Enable/Disable Ceilometer
 blazar_ceilometer_enabled: False
 
-# TODO(odyssey4me):
-# This can be simplified once all the roles are using
-# python_venv_build. We can then switch to using a
-# set of constraints in pip.conf inside the venv,
-# perhaps prepared by giving a giving a list of
-# constraints to the role.
-blazar_pip_install_args: >-
-  {{ blazar_developer_mode | ternary(pip_install_developer_constraints | default('--constraint /opt/developer-pip-constraints.txt'), '') }}
-  {{ (pip_install_upper_constraints is defined) | ternary('--constraint ' + pip_install_upper_constraints | default(''), '') }}
-  {{ pip_install_options | default('') }}
+blazar_pip_install_args: "{{ pip_install_options | default('') }}"
 
 blazar_venv_tag: "{{ venv_tag | default('untagged') }}"
 blazar_bin: "/openstack/venvs/blazar-{{ blazar_venv_tag }}/bin"
 
-# venv_download, even when true, will use the fallback method of building the
-# venv from scratch if the venv download fails.
-blazar_venv_download: "{{ not blazar_developer_mode | bool }}"
-blazar_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/blazar.tgz
 blazar_etc_dir: /etc/blazar
 blazar_config_option: "--config-file {{ blazar_etc_dir }}/blazar.conf"
 
@@ -60,9 +47,10 @@ blazar_pip_packages:
   - python-blazarclient
   - systemd-python
 
-## blazar developer constraint
-blazar_developer_constraints:
+## blazar constraints
+blazar_git_constraints:
   - "git+{{ blazar_git_repo }}@{{ blazar_git_install_branch }}#egg=blazar"
+  - "--constraint {{ blazar_upper_constraints_url }}"
 
 ## System info
 blazar_system_user_name: blazar
