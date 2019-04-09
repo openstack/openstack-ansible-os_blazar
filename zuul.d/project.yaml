@@ -20,9 +20,11 @@
       - release-notes-jobs-python3
     check:
       jobs:
+        - openstack-ansible-deploy-aio_metal_blazar-debian-stable
         - openstack-ansible-deploy-aio_metal_blazar-ubuntu-bionic
     gate:
       jobs:
+        - openstack-ansible-deploy-aio_metal_blazar-debian-stable
         - openstack-ansible-deploy-aio_metal_blazar-ubuntu-bionic
     experimental:
       jobs:
