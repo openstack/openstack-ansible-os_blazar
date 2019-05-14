@@ -29,6 +29,9 @@ galaxy_info:
   - name: Ubuntu
     versions:
     - xenial
+  - name: opensuse
+    versions:
+    - 15
   galaxy_tags:
     - cloud
     - python
