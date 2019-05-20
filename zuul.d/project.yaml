@@ -16,17 +16,8 @@
     templates:
       - check-requirements
       - openstack-ansible-linters
+      - openstack-ansible-deploy-aio_metal-jobs
+      # TODO: Add support of distro metal jobs in blazar
+      # - openstack-ansible-deploy-aio_distro_metal-jobs
       - publish-openstack-docs-pti
       - release-notes-jobs-python3
-    check:
-      jobs:
-        - openstack-ansible-deploy-aio_metal_blazar-debian-stable
-        - openstack-ansible-deploy-aio_metal_blazar-ubuntu-bionic
-    gate:
-      jobs:
-        - openstack-ansible-deploy-aio_metal_blazar-debian-stable
-        - openstack-ansible-deploy-aio_metal_blazar-ubuntu-bionic
-    experimental:
-      jobs:
-        - openstack-ansible-deploy-aio_metal_blazar-centos-7
-        - openstack-ansible-deploy-aio_metal_blazar-opensuse-150
