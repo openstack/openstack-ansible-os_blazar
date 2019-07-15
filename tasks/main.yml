@@ -26,6 +26,37 @@
   tags:
     - always
 
+- import_tasks: db_setup.yml
+  when:
+    - "inventory_hostname == ((groups['blazar_all'] | intersect(ansible_play_hosts)) | list)[0]"
+  vars:
+    _oslodb_setup_host: "{{ blazar_db_setup_host }}"
+    _oslodb_databases:
+      - name: "{{ blazar_galera_database }}"
+        users:
+          - username: "{{ blazar_galera_user }}"
+            password: "{{ blazar_container_mysql_password }}"
+  tags:
+    - common-db
+    - blazar-config
+
+- include_tasks: mq_setup.yml
+  when:
+    - "inventory_hostname == ((groups['blazar_all'] | intersect(ansible_play_hosts)) | list)[0]"
+  with_items:
+    - oslomsg_setup_host: "{{ blazar_oslomsg_rpc_setup_host }}"
+      oslomsg_userid: "{{ blazar_oslomsg_rpc_userid }}"
+      oslomsg_password: "{{ blazar_oslomsg_rpc_password }}"
+      oslomsg_vhost: "{{ blazar_oslomsg_rpc_vhost }}"
+      oslomsg_transport: "{{ blazar_oslomsg_rpc_transport }}"
+    - oslomsg_setup_host: "{{ blazar_oslomsg_notify_setup_host }}"
+      oslomsg_userid: "{{ blazar_oslomsg_notify_userid }}"
+      oslomsg_password: "{{ blazar_oslomsg_notify_password }}"
+      oslomsg_vhost: "{{ blazar_oslomsg_notify_vhost }}"
+      oslomsg_transport: "{{ blazar_oslomsg_notify_transport }}"
+  tags:
+    - blazar-config
+
 - include_tasks: blazar_pre_install.yml
   tags:
     - blazar-install
@@ -48,6 +79,12 @@
     - blazar-install
 
 - include_tasks: blazar_post_install.yml
+  tags:
+    - blazar-config
+
+- include_tasks: blazar_db_setup.yml
+  when:
+    - "inventory_hostname == ((groups['blazar_all'] | intersect(ansible_play_hosts)) | list)[0]"
   tags:
     - blazar-config
 
@@ -77,29 +114,6 @@
   tags:
     - blazar-config
     - systemd-service
-
-- include_tasks: mq_setup.yml
-  when:
-    - "inventory_hostname == ((groups['blazar_all'] | intersect(ansible_play_hosts)) | list)[0]"
-  with_items:
-    - oslomsg_setup_host: "{{ blazar_oslomsg_rpc_setup_host }}"
-      oslomsg_userid: "{{ blazar_oslomsg_rpc_userid }}"
-      oslomsg_password: "{{ blazar_oslomsg_rpc_password }}"
-      oslomsg_vhost: "{{ blazar_oslomsg_rpc_vhost }}"
-      oslomsg_transport: "{{ blazar_oslomsg_rpc_transport }}"
-    - oslomsg_setup_host: "{{ blazar_oslomsg_notify_setup_host }}"
-      oslomsg_userid: "{{ blazar_oslomsg_notify_userid }}"
-      oslomsg_password: "{{ blazar_oslomsg_notify_password }}"
-      oslomsg_vhost: "{{ blazar_oslomsg_notify_vhost }}"
-      oslomsg_transport: "{{ blazar_oslomsg_notify_transport }}"
-  tags:
-    - blazar-config
-
-- include_tasks: blazar_db_setup.yml
-  when:
-    - "inventory_hostname == ((groups['blazar_all'] | intersect(ansible_play_hosts)) | list)[0]"
-  tags:
-    - blazar-config
 
 - include_tasks: blazar_service_setup.yml
   when:
