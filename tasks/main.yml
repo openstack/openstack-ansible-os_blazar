@@ -40,24 +40,24 @@
     - common-db
     - blazar-config
 
-- include_tasks: mq_setup.yml
+- import_tasks: mq_setup.yml
   when:
     - "inventory_hostname == ((groups['blazar_all'] | intersect(ansible_play_hosts)) | list)[0]"
-  with_items:
-    - oslomsg_setup_host: "{{ blazar_oslomsg_rpc_setup_host }}"
-      oslomsg_userid: "{{ blazar_oslomsg_rpc_userid }}"
-      oslomsg_password: "{{ blazar_oslomsg_rpc_password }}"
-      oslomsg_vhost: "{{ blazar_oslomsg_rpc_vhost }}"
-      oslomsg_transport: "{{ blazar_oslomsg_rpc_transport }}"
-    - oslomsg_setup_host: "{{ blazar_oslomsg_notify_setup_host }}"
-      oslomsg_userid: "{{ blazar_oslomsg_notify_userid }}"
-      oslomsg_password: "{{ blazar_oslomsg_notify_password }}"
-      oslomsg_vhost: "{{ blazar_oslomsg_notify_vhost }}"
-      oslomsg_transport: "{{ blazar_oslomsg_notify_transport }}"
+  vars:
+    _oslomsg_rpc_setup_host: "{{ blazar_oslomsg_rpc_setup_host }}"
+    _oslomsg_rpc_userid: "{{ blazar_oslomsg_rpc_userid }}"
+    _oslomsg_rpc_password: "{{ blazar_oslomsg_rpc_password }}"
+    _oslomsg_rpc_vhost: "{{ blazar_oslomsg_rpc_vhost }}"
+    _oslomsg_rpc_transport: "{{ blazar_oslomsg_rpc_transport }}"
+    _oslomsg_notify_setup_host: "{{ blazar_oslomsg_notify_setup_host }}"
+    _oslomsg_notify_userid: "{{ blazar_oslomsg_notify_userid }}"
+    _oslomsg_notify_password: "{{ blazar_oslomsg_notify_password }}"
+    _oslomsg_notify_vhost: "{{ blazar_oslomsg_notify_vhost }}"
+    _oslomsg_notify_transport: "{{ blazar_oslomsg_notify_transport }}"
   tags:
     - blazar-config
 
-- include_tasks: blazar_pre_install.yml
+- import_tasks: blazar_pre_install.yml
   tags:
     - blazar-install
 
@@ -78,18 +78,18 @@
   tags:
     - blazar-install
 
-- include_tasks: blazar_post_install.yml
+- import_tasks: blazar_post_install.yml
   tags:
     - blazar-config
 
-- include_tasks: blazar_db_setup.yml
+- import_tasks: blazar_db_setup.yml
   when:
     - "inventory_hostname == ((groups['blazar_all'] | intersect(ansible_play_hosts)) | list)[0]"
   tags:
     - blazar-config
 
 - name: Run the systemd service role
-  include_role:
+  import_role:
     name: systemd_service
   vars:
     systemd_user_name: "{{ blazar_system_user_name }}"
@@ -101,21 +101,12 @@
     systemd_BlockIOAccounting: true
     systemd_MemoryAccounting: true
     systemd_TasksAccounting: true
-    systemd_services:
-      - service_name: "{{ service_var.service_name }}"
-        enabled: yes
-        state: started
-        execstarts: "{{ service_var.execstarts }}"
-        execreloads: "{{ service_var.execreloads | default([]) }}"
-        config_overrides: "{{ service_var.init_config_overrides }}"
-  with_items: "{{ filtered_blazar_services }}"
-  loop_control:
-    loop_var: service_var
+    systemd_services: "{{ filtered_blazar_services }}"
   tags:
     - blazar-config
     - systemd-service
 
-- include_tasks: blazar_service_setup.yml
+- import_tasks: blazar_service_setup.yml
   when:
     - "inventory_hostname == ((groups['blazar_all'] | intersect(ansible_play_hosts)) | list)[0]"
   tags:
