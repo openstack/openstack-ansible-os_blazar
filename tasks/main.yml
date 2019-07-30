@@ -106,7 +106,32 @@
     - blazar-config
     - systemd-service
 
-- import_tasks: blazar_service_setup.yml
+- include_tasks: service_setup.yml
+  vars:
+    _service_adminuri_insecure: "{{ keystone_service_adminuri_insecure }}"
+    _service_in_ldap: "{{ blazar_service_in_ldap }}"
+    _service_setup_host: "{{ blazar_service_setup_host }}"
+    _service_setup_host_python_interpreter: "{{ blazar_service_setup_host_python_interpreter }}"
+    _service_project_name: "{{ blazar_service_project_name }}"
+    _service_region: "{{ blazar_service_region }}"
+    _service_users:
+      - name: "{{ blazar_service_user_name }}"
+        password: "{{ blazar_service_password }}"
+        role: "{{ blazar_role_name }}"
+    _service_endpoints:
+      - service: "{{ blazar_service_name }}"
+        interface: "public"
+        url: "{{ blazar_service_publicurl }}"
+      - service: "{{ blazar_service_name }}"
+        interface: "internal"
+        url: "{{ blazar_service_internalurl }}"
+      - service: "{{ blazar_service_name }}"
+        interface: "admin"
+        url: "{{ blazar_service_adminurl }}"
+    _service_catalog:
+      - name: "{{ blazar_service_name }}"
+        type: "{{ blazar_service_type }}"
+        description: "{{ blazar_service_description }}"
   when:
     - "inventory_hostname == ((groups['blazar_all'] | intersect(ansible_play_hosts)) | list)[0]"
   tags:
