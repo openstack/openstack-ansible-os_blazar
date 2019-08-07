@@ -106,7 +106,7 @@
     - blazar-config
     - systemd-service
 
-- include_tasks: service_setup.yml
+- import_tasks: service_setup.yml
   vars:
     _service_adminuri_insecure: "{{ keystone_service_adminuri_insecure }}"
     _service_in_ldap: "{{ blazar_service_in_ldap }}"
