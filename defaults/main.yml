@@ -136,7 +136,7 @@ blazar_oslomsg_notify_vhost: "{{ blazar_oslomsg_rpc_vhost }}"
 blazar_oslomsg_notify_password: "{{ blazar_oslomsg_rpc_password }}"
 
 blazar_role_name: admin
-blazar_bind_address: 0.0.0.0
+blazar_bind_address: "{{ openstack_service_bind_address | default('0.0.0.0') }}"
 blazar_service_port: 1234
 blazar_program_name: blazar-server
 
