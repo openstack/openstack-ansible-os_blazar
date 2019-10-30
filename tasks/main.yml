@@ -55,6 +55,7 @@
     _oslomsg_notify_vhost: "{{ blazar_oslomsg_notify_vhost }}"
     _oslomsg_notify_transport: "{{ blazar_oslomsg_notify_transport }}"
   tags:
+    - common-mq
     - blazar-config
 
 - import_tasks: blazar_pre_install.yml
