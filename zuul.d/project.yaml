@@ -29,4 +29,4 @@
     experimental:
       jobs:
         - openstack-ansible-deploy-aio_metal_blazar-centos-7
-        - openstack-ansible-deploy-aio_metal_blazar-opensuse-150
+        - openstack-ansible-deploy-aio_metal_blazar-opensuse-15
