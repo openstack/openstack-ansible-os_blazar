@@ -23,9 +23,9 @@ blazar_service_setup_host_python_interpreter: "{{ openstack_service_setup_host_p
 blazar_package_state: latest
 blazar_pip_package_state: latest
 
-blazar_git_repo: https://git.openstack.org/openstack/blazar
+blazar_git_repo: https://opendev.org/openstack/blazar
 blazar_git_install_branch: master
-blazar_upper_constraints_url: "{{ requirements_git_url | default('https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt?h=' ~ requirements_git_install_branch | default('master')) }}"
+blazar_upper_constraints_url: "{{ requirements_git_url | default('https://releases.openstack.org/constraints/upper/' ~ requirements_git_install_branch | default('master')) }}"
 
 # Enable/Disable Ceilometer
 blazar_ceilometer_enabled: False
