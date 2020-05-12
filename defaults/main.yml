@@ -145,10 +145,3 @@ blazar_blazar_api_paste_ini_overrides: {}
 blazar_blazar_conf_overrides: {}
 blazar_api_init_config_overrides: {}
 blazar_manager_init_config_overrides: {}
-
-# This variable is used by the repo_build process to determine
-# which host group to check for members of before building the
-# pip packages required by this role. The value is picked up
-# by the py_pkgs lookup.
-blazar_role_project_group: blazar_all
-
