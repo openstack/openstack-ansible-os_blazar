@@ -31,6 +31,9 @@
     - "inventory_hostname == ((groups['blazar_all'] | intersect(ansible_play_hosts)) | list)[0]"
   vars:
     _oslodb_setup_host: "{{ blazar_db_setup_host }}"
+    _oslodb_ansible_python_interpreter: "{{ blazar_db_setup_python_interpreter }}"
+    _oslodb_setup_endpoint: "{{ blazar_galera_address }}"
+    _oslodb_setup_port: "{{ blazar_galera_port }}"
     _oslodb_databases:
       - name: "{{ blazar_galera_database }}"
         users:
