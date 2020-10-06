@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+_blazar_is_first_play_host: "{{ (blazar_services['blazar-api']['group'] in group_names and inventory_hostname == ((groups[blazar_services['blazar-api']['group']] | intersect(ansible_play_hosts)) | list)[0]) | bool }}"
+
 #
 # Compile a list of the services on a host based on whether
 # the host is in the host group and the service is enabled.
