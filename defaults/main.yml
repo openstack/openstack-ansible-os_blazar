@@ -20,15 +20,14 @@
 blazar_service_setup_host: "{{ openstack_service_setup_host | default('localhost') }}"
 blazar_service_setup_host_python_interpreter: "{{ openstack_service_setup_host_python_interpreter | default((blazar_service_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_python['executable'])) }}"
 
-blazar_package_state: latest
-blazar_pip_package_state: latest
+blazar_package_state: "{{ package_state | default('latest') }}"
 
 blazar_git_repo: https://opendev.org/openstack/blazar
 blazar_git_install_branch: master
 blazar_upper_constraints_url: "{{ requirements_git_url | default('https://releases.openstack.org/constraints/upper/' ~ requirements_git_install_branch | default('master')) }}"
 
 # Enable/Disable Ceilometer
-blazar_ceilometer_enabled: False
+blazar_ceilometer_enabled: "{{ (groups['ceilometer_all'] is defined) and (groups['ceilometer_all'] | length > 0) }}"
 
 blazar_pip_install_args: "{{ pip_install_options | default('') }}"
 
@@ -67,11 +66,11 @@ blazar_galera_database: blazar
 blazar_galera_user: blazar
 blazar_galera_use_ssl: "{{ galera_use_ssl | default(False) }}"
 blazar_galera_ssl_ca_cert: "{{ galera_ssl_ca_cert | default('/etc/ssl/certs/galera-ca.pem') }}"
-blazar_galera_port: 3306
+blazar_galera_port: "{{ galera_port | default('3306') }}"
 
 ## Service Type and Data
 blazar_service_name: blazar
-blazar_service_region: RegionOne
+blazar_service_region: "{{ service_region | default('RegionOne') }}"
 blazar_service_proto: http
 blazar_service_type: policy
 blazar_service_description: "blazar service"
@@ -85,9 +84,6 @@ blazar_service_registry_proto: "{{ blazar_service_proto }}"
 blazar_service_publicuri_proto: "{{ openstack_service_publicuri_proto | default(blazar_service_proto) }}"
 blazar_service_adminuri_proto: "{{ openstack_service_adminuri_proto | default(blazar_service_proto) }}"
 blazar_service_internaluri_proto: "{{ openstack_service_internaluri_proto | default(blazar_service_proto) }}"
-
-#NOTE:  move password to tests/test-vars.yml
-blazar_service_password: password
 
 ## Service name
 blazar_services:
@@ -111,7 +107,7 @@ blazar_service_user_domain_id: default
 blazar_service_user_name: blazar
 blazar_keystone_auth_plugin: password
 
-blazar_service_in_ldap: false
+blazar_service_in_ldap: "{{ service_ldap_backend_enabled | default(False) }}"
 
 ## Oslo Messaging
 blazar_messaging_enabled: true
