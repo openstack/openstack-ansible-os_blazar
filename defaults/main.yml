@@ -39,7 +39,7 @@ blazar_config_option: "--config-file {{ blazar_etc_dir }}/blazar.conf"
 
 ## Common PIP requirements
 blazar_pip_packages:
-  - blazar
+  - "git+{{ blazar_git_repo }}@{{ blazar_git_install_branch }}#egg=blazar"
   - blazar-nova
   - osprofiler
   - pymysql
@@ -48,7 +48,6 @@ blazar_pip_packages:
 
 ## blazar constraints
 blazar_git_constraints:
-  - "git+{{ blazar_git_repo }}@{{ blazar_git_install_branch }}#egg=blazar"
   - "--constraint {{ blazar_upper_constraints_url }}"
 
 ## System info
