@@ -21,4 +21,4 @@
       # TODO: Add support of distro metal jobs in blazar
       # - openstack-ansible-deploy-aio_distro_metal-jobs
       - publish-openstack-docs-pti
-      - release-notes-jobs-python3
+      - build-release-notes-jobs-python3
