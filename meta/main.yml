@@ -25,13 +25,11 @@ galaxy_info:
   platforms:
   - name: Debian
     versions:
-    - stretch
+      - buster
   - name: Ubuntu
     versions:
-    - xenial
-  - name: opensuse
-    versions:
-    - 15
+      - bionic
+      - focal
   galaxy_tags:
     - cloud
     - python
