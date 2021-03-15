@@ -18,7 +18,7 @@
 # for the service setup. The host must already have
 # clouds.yaml properly configured.
 blazar_service_setup_host: "{{ openstack_service_setup_host | default('localhost') }}"
-blazar_service_setup_host_python_interpreter: "{{ openstack_service_setup_host_python_interpreter | default((blazar_service_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_python['executable'])) }}"
+blazar_service_setup_host_python_interpreter: "{{ openstack_service_setup_host_python_interpreter | default((blazar_service_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable'])) }}"
 
 blazar_package_state: "{{ package_state | default('latest') }}"
 
@@ -59,7 +59,7 @@ blazar_system_user_home: "/var/lib/{{ blazar_system_user_name }}"
 
 ## Database credentials
 blazar_db_setup_host: "{{ openstack_db_setup_host | default('localhost') }}"
-blazar_db_setup_python_interpreter: "{{ openstack_db_setup_python_interpreter | default((blazar_db_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_python['executable'])) }}"
+blazar_db_setup_python_interpreter: "{{ openstack_db_setup_python_interpreter | default((blazar_db_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable'])) }}"
 blazar_galera_address: "{{ galera_address | default('127.0.0.1') }}"
 blazar_galera_database: blazar
 blazar_galera_user: blazar
