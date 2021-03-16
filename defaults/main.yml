@@ -139,6 +139,7 @@ blazar_program_name: blazar-server
 
 ## Tunable overrides
 blazar_blazar_api_paste_ini_overrides: {}
+blazar_policy_overrides: {}
 blazar_blazar_conf_overrides: {}
 blazar_api_init_config_overrides: {}
 blazar_manager_init_config_overrides: {}

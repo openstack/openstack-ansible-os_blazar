@@ -16,17 +16,23 @@
 
 - name: Deploy configuration files
   config_template:
-    src: "{{ item.src }}"
+    src: "{{ item.src | default(omit) }}"
     dest: "{{ item.dest }}"
     owner: "root"
     group: "{{ blazar_system_group_name }}"
     mode: "0640"
-    config_overrides: "{{ item.config_overrides }}"
+    config_overrides: "{{ item.config_overrides | default(omit) }}"
+    content: "{{ item.content | default(omit) }}"
     config_type: "{{ item.config_type }}"
+  when: item.condition | default(True)
   with_items:
     - src: "blazar.conf.j2"
       dest: "{{ blazar_etc_dir }}/blazar.conf"
       config_overrides: "{{ blazar_blazar_conf_overrides }}"
       config_type: "ini"
+    - dest: "{{ blazar_etc_dir }}/policy.yaml"
+      content: "{{ blazar_policy_overrides }}"
+      config_type: "yaml"
+      condition: "{{ (blazar_policy_overrides) }}"
   notify:
     - Restart blazar services
