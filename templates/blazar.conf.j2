@@ -5,14 +5,14 @@ host=0.0.0.0
 port={{ blazar_service_port }}
 
 # oslo.messaging default transport
-transport_url = {{ blazar_oslomsg_rpc_transport }}://{% for host in blazar_oslomsg_rpc_servers.split(',') %}{{ blazar_oslomsg_rpc_userid }}:{{ blazar_oslomsg_rpc_password }}@{{ host }}:{{ blazar_oslomsg_rpc_port }}{% if not loop.last %},{% else %}/{{ blazar_oslomsg_rpc_vhost }}{% if (blazar_oslomsg_rpc_use_ssl | lower) | bool %}?ssl=1{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
+transport_url = {{ blazar_oslomsg_rpc_transport }}://{% for host in blazar_oslomsg_rpc_servers.split(',') %}{{ blazar_oslomsg_rpc_userid }}:{{ blazar_oslomsg_rpc_password }}@{{ host }}:{{ blazar_oslomsg_rpc_port }}{% if not loop.last %},{% else %}/{{ blazar_oslomsg_rpc_vhost }}{% if blazar_oslomsg_rpc_use_ssl | bool %}?ssl=1&ssl_version={{ blazar_oslomsg_rpc_ssl_version }}&ssl_ca_file={{ blazar_oslomsg_rpc_ssl_ca_file }}{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
 
 [oslo_messaging_rabbit]
 ssl = {{ blazar_oslomsg_notify_use_ssl | bool }}
 
 [oslo_messaging_notifications]
 driver = {{ (blazar_ceilometer_enabled | bool) | ternary('messagingv2', 'noop') }}
-transport_url = {{ blazar_oslomsg_notify_transport }}://{% for host in blazar_oslomsg_notify_servers.split(',') %}{{ blazar_oslomsg_notify_userid }}:{{ blazar_oslomsg_notify_password }}@{{ host }}:{{ blazar_oslomsg_notify_port }}{% if not loop.last %},{% else %}/{{ blazar_oslomsg_notify_vhost }}{% if (blazar_oslomsg_notify_use_ssl | lower) | bool %}?ssl=1{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
+transport_url = {{ blazar_oslomsg_notify_transport }}://{% for host in blazar_oslomsg_notify_servers.split(',') %}{{ blazar_oslomsg_notify_userid }}:{{ blazar_oslomsg_notify_password }}@{{ host }}:{{ blazar_oslomsg_notify_port }}{% if not loop.last %},{% else %}/{{ blazar_oslomsg_notify_vhost }}{% if blazar_oslomsg_notify_use_ssl | bool %}?ssl=1&ssl_version={{ blazar_oslomsg_notify_ssl_version }}&ssl_ca_file={{ blazar_oslomsg_notify_ssl_ca_file }}{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
 
 
 [manager]
