@@ -15,7 +15,7 @@
 # limitations under the License.
 
 - name: Deploy configuration files
-  config_template:
+  openstack.config_template.config_template:
     src: "{{ item.src | default(omit) }}"
     dest: "{{ item.dest }}"
     owner: "root"
