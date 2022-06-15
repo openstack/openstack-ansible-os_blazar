@@ -108,6 +108,12 @@ blazar_service_project_domain_id: default
 blazar_service_project_name: service
 blazar_service_user_domain_id: default
 blazar_service_user_name: blazar
+blazar_service_role_names:
+  - admin
+  - service
+blazar_service_token_roles:
+  - service
+blazar_service_token_roles_required: "{{ openstack_service_token_roles_required | default(True) }}"
 blazar_keystone_auth_plugin: password
 
 blazar_service_in_ldap: "{{ service_ldap_backend_enabled | default(False) }}"
@@ -140,7 +146,6 @@ blazar_oslomsg_notify_password: "{{ blazar_oslomsg_rpc_password }}"
 blazar_oslomsg_notify_ssl_version: "{{ oslomsg_notify_ssl_version | default('TLSv1_2') }}"
 blazar_oslomsg_notify_ssl_ca_file: "{{ oslomsg_notify_ssl_ca_file | default('') }}"
 
-blazar_role_name: admin
 blazar_bind_address: "{{ openstack_service_bind_address | default('0.0.0.0') }}"
 blazar_service_port: 1234
 blazar_program_name: blazar-server

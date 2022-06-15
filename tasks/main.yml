@@ -138,7 +138,7 @@
     _service_users:
       - name: "{{ blazar_service_user_name }}"
         password: "{{ blazar_service_password }}"
-        role: "{{ blazar_role_name }}"
+        role: "{{ blazar_service_role_names }}"
     _service_endpoints:
       - service: "{{ blazar_service_name }}"
         interface: "public"
