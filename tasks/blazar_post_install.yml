@@ -36,3 +36,4 @@
       condition: "{{ (blazar_policy_overrides) }}"
   notify:
     - Restart blazar services
+    - Restart uwsgi services

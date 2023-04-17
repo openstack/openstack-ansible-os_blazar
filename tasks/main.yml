@@ -103,6 +103,16 @@
   tags:
     - blazar-config
 
+- name: Import uwsgi role
+  import_role:
+    name: uwsgi
+  vars:
+    uwsgi_services: "{{ uwsgi_blazar_services }}"
+    uwsgi_install_method: "source"
+  tags:
+    - blazar-config
+    - uwsgi
+
 - name: Run the systemd service role
   import_role:
     name: systemd_service
