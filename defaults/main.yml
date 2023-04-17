@@ -75,7 +75,7 @@ blazar_db_connection_recycle_time: "{{ openstack_db_connection_recycle_time | de
 blazar_service_name: blazar
 blazar_service_region: "{{ service_region | default('RegionOne') }}"
 blazar_service_proto: http
-blazar_service_type: policy
+blazar_service_type: reservation
 blazar_service_description: "blazar service"
 blazar_service_publicuri: "{{ blazar_service_publicuri_proto }}://{{ external_lb_vip_address }}:{{ blazar_service_port }}"
 blazar_service_publicurl: "{{ blazar_service_publicuri }}"
