@@ -100,6 +100,7 @@ blazar_services:
     uwsgi_port: "{{ blazar_service_port }}"
     uwsgi_bind_address: "{{ blazar_bind_address }}"
     uwsgi_overrides: "{{ blazar_api_uwsgi_ini_overrides }}"
+    uwsgi_tls: "{{ blazar_backend_ssl | ternary(blazar_uwsgi_tls, {}) }}"
   blazar-manager:
     group: blazar_all
     service_name: blazar-manager
@@ -112,6 +113,9 @@ blazar_wsgi_processes_max: 16
 blazar_wsgi_processes: "{{ [[(ansible_facts['processor_vcpus']//ansible_facts['processor_threads_per_core'])|default(1), 1] | max * 2, blazar_wsgi_processes_max] | min }}"
 blazar_wsgi_threads: 1
 blazar_wsgi_buffer_size: 65535
+blazar_uwsgi_tls:
+  crt: "{{ blazar_ssl_cert }}"
+  key: "{{ blazar_ssl_key }}"
 
 ## Keystone
 blazar_service_project_domain_id: default
@@ -167,3 +171,51 @@ blazar_blazar_conf_overrides: {}
 blazar_api_init_config_overrides: {}
 blazar_manager_init_config_overrides: {}
 blazar_api_uwsgi_ini_overrides: {}
+
+###
+### Backend TLS
+###
+
+# Define if communication between haproxy and service backends should be
+# encrypted with TLS.
+blazar_backend_ssl: "{{ openstack_service_backend_ssl | default(False) }}"
+
+# Storage location for SSL certificate authority
+blazar_pki_dir: "{{ openstack_pki_dir | default('/etc/openstack_deploy/pki') }}"
+
+# Delegated host for operating the certificate authority
+blazar_pki_setup_host: "{{ openstack_pki_setup_host | default('localhost') }}"
+
+# blazar server certificate
+blazar_pki_keys_path: "{{ blazar_pki_dir ~ '/certs/private/' }}"
+blazar_pki_certs_path: "{{ blazar_pki_dir ~ '/certs/certs/' }}"
+blazar_pki_intermediate_cert_name: "{{ openstack_pki_service_intermediate_cert_name | default('ExampleCorpIntermediate') }}"
+blazar_pki_regen_cert: ''
+blazar_pki_san: "{{ openstack_pki_san | default('DNS:' ~ ansible_facts['hostname'] ~ ',IP:' ~ management_address) }}"
+blazar_pki_certificates:
+  - name: "blazar_{{ ansible_facts['hostname'] }}"
+    provider: ownca
+    cn: "{{ ansible_facts['hostname'] }}"
+    san: "{{ blazar_pki_san }}"
+    signed_by: "{{ blazar_pki_intermediate_cert_name }}"
+
+# blazar destination files for SSL certificates
+blazar_ssl_cert: /etc/blazar/blazar.pem
+blazar_ssl_key: /etc/blazar/blazar.key
+
+# Installation details for SSL certificates
+blazar_pki_install_certificates:
+  - src: "{{ blazar_user_ssl_cert | default(blazar_pki_certs_path ~ 'blazar_' ~ ansible_facts['hostname'] ~ '-chain.crt') }}"
+    dest: "{{ blazar_ssl_cert }}"
+    owner: "{{ blazar_system_user_name }}"
+    group: "{{ blazar_system_user_name }}"
+    mode: "0644"
+  - src: "{{ blazar_user_ssl_key | default(blazar_pki_keys_path ~ 'blazar_' ~ ansible_facts['hostname'] ~ '.key.pem') }}"
+    dest: "{{ blazar_ssl_key }}"
+    owner: "{{ blazar_system_user_name }}"
+    group: "{{ blazar_system_user_name }}"
+    mode: "0600"
+
+# Define user-provided SSL certificates
+#blazar_user_ssl_cert: <path to cert on ansible deployment host>
+#blazar_user_ssl_key: <path to cert on ansible deployment host>

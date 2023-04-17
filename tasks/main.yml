@@ -76,6 +76,26 @@
   tags:
     - blazar-install
 
+- name: Create and install SSL certificates
+  include_role:
+    name: pki
+    tasks_from: main_certs.yml
+    apply:
+      tags:
+        - blazar-config
+        - pki
+  vars:
+    pki_setup_host: "{{ blazar_pki_setup_host }}"
+    pki_dir: "{{ blazar_pki_dir }}"
+    pki_create_certificates: "{{ blazar_user_ssl_cert is not defined and blazar_user_ssl_key is not defined }}"
+    pki_regen_cert: "{{ blazar_pki_regen_cert }}"
+    pki_certificates: "{{ blazar_pki_certificates }}"
+    pki_install_certificates: "{{ blazar_pki_install_certificates }}"
+  when:
+    - blazar_backend_ssl
+  tags:
+    - always
+
 - name: Install the python venv
   import_role:
     name: "python_venv_build"
