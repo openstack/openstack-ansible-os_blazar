@@ -14,12 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: create blazar group
+- name: Create blazar group
   group:
     name: "{{ blazar_system_group_name }}"
     state: present
 
-- name: create blazar user
+- name: Create blazar user
   user:
     name: "{{ blazar_system_user_name }}"
     group: "{{ blazar_system_group_name }}"
