@@ -153,7 +153,13 @@ blazar_oslomsg_rpc_servers: "{{ oslomsg_rpc_servers | default('127.0.0.1') }}"
 blazar_oslomsg_rpc_port: "{{ oslomsg_rpc_port | default('5672') }}"
 blazar_oslomsg_rpc_use_ssl: "{{ oslomsg_rpc_use_ssl | default(False) }}"
 blazar_oslomsg_rpc_userid: blazar
-blazar_oslomsg_rpc_vhost: /blazar
+# vhost name depends on value of oslomsg_rabbit_quorum_queues. In case quorum queues
+# are not used - vhost name will be prefixed with leading `/`.
+blazar_oslomsg_rpc_vhost:
+  - name: /blazar
+    state: "{{ blazar_oslomsg_rabbit_quorum_queues | ternary('absent', 'present') }}"
+  - name: blazar
+    state: "{{ blazar_oslomsg_rabbit_quorum_queues | ternary('present', 'absent') }}"
 blazar_oslomsg_rpc_ssl_version: "{{ oslomsg_rpc_ssl_version | default('TLSv1_2') }}"
 blazar_oslomsg_rpc_ssl_ca_file: "{{ oslomsg_rpc_ssl_ca_file | default('') }}"
 
@@ -169,6 +175,11 @@ blazar_oslomsg_notify_vhost: "{{ blazar_oslomsg_rpc_vhost }}"
 blazar_oslomsg_notify_password: "{{ blazar_oslomsg_rpc_password }}"
 blazar_oslomsg_notify_ssl_version: "{{ oslomsg_notify_ssl_version | default('TLSv1_2') }}"
 blazar_oslomsg_notify_ssl_ca_file: "{{ oslomsg_notify_ssl_ca_file | default('') }}"
+
+## RabbitMQ integration
+blazar_oslomsg_rabbit_quorum_queues: "{{ oslomsg_rabbit_quorum_queues | default(True) }}"
+blazar_oslomsg_rabbit_quorum_delivery_limit: "{{ oslomsg_rabbit_quorum_delivery_limit | default(0) }}"
+blazar_oslomsg_rabbit_quorum_max_memory_bytes: "{{ oslomsg_rabbit_quorum_max_memory_bytes | default(0) }}"
 
 blazar_bind_address: "{{ openstack_service_bind_address | default('0.0.0.0') }}"
 blazar_service_port: 1234
