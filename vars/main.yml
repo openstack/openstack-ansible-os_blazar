@@ -67,7 +67,7 @@ uwsgi_blazar_services: |-
   {%     set _ = value.update(
             {
              'wsgi_path':  blazar_bin ~ '/' ~ value.wsgi_name,
-             'wsgi_venv': "{{ blazar_bin | dirname }}",
+             'wsgi_venv': blazar_bin | dirname,
              'uwsgi_uid': blazar_system_user_name,
              'uwsgi_guid': blazar_system_group_name,
              'uwsgi_processes': blazar_wsgi_processes,
