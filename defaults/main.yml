@@ -50,6 +50,8 @@ blazar_manager_plugins:
   - virtual.instance.plugin
   - virtual.floatingip.plugin
 
+blazar_memcached_servers: "{{ memcached_servers }}"
+
 ## Common PIP requirements
 blazar_pip_packages:
   - "git+{{ blazar_git_repo }}@{{ blazar_git_install_branch }}#egg=blazar"
@@ -58,6 +60,8 @@ blazar_pip_packages:
   - pymysql
   - python-blazarclient
   - systemd-python
+  - pymemcache
+  - python-memcached
 
 ## blazar constraints
 blazar_git_constraints:
