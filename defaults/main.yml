@@ -45,6 +45,10 @@ blazar_etc_dir: /etc/blazar
 blazar_config_option: "--config-file {{ blazar_etc_dir }}/blazar.conf"
 
 blazar_nova_aggregate_name: freepool
+blazar_manager_plugins:
+  - physical.host.plugin
+  - virtual.instance.plugin
+  - virtual.floatingip.plugin
 
 ## Common PIP requirements
 blazar_pip_packages:
