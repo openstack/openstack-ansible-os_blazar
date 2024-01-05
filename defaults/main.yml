@@ -39,8 +39,12 @@ blazar_pip_install_args: "{{ pip_install_options | default('') }}"
 blazar_venv_tag: "{{ venv_tag | default('untagged') }}"
 blazar_bin: "/openstack/venvs/blazar-{{ blazar_venv_tag }}/bin"
 
+# Blazar configuration
+
 blazar_etc_dir: /etc/blazar
 blazar_config_option: "--config-file {{ blazar_etc_dir }}/blazar.conf"
+
+blazar_nova_aggregate_name: freepool
 
 ## Common PIP requirements
 blazar_pip_packages:

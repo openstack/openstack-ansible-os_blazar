@@ -196,3 +196,14 @@
     - _blazar_is_first_play_host
   tags:
     - always
+
+- name: Create required Nova aggregates
+  include_role:
+    name: openstack.osa.openstack_resources
+  vars:
+    openstack_resources_compute:
+      aggregates:
+        - name: "{{ blazar_nova_aggregate_name }}"
+          exclusive: "no"
+  when:
+    - blazar_nova_aggregate_name
