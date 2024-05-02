@@ -177,6 +177,7 @@ blazar_oslomsg_rpc_ssl_version: "{{ oslomsg_rpc_ssl_version | default('TLSv1_2')
 blazar_oslomsg_rpc_ssl_ca_file: "{{ oslomsg_rpc_ssl_ca_file | default('') }}"
 
 # Notify
+blazar_oslomsg_notify_configure: "{{ oslomsg_notify_configure | default(blazar_ceilometer_enabled) }}"
 blazar_oslomsg_notify_host_group: "{{ oslomsg_notify_host_group | default('rabbitmq_all') }}"
 blazar_oslomsg_notify_setup_host: "{{ (blazar_oslomsg_notify_host_group in groups) | ternary(groups[blazar_oslomsg_notify_host_group][0], 'localhost') }}"
 blazar_oslomsg_notify_transport: "{{ oslomsg_notify_transport | default('rabbit') }}"

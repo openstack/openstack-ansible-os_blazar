@@ -73,6 +73,7 @@
     _oslomsg_notify_vhost: "{{ blazar_oslomsg_notify_vhost }}"
     _oslomsg_notify_transport: "{{ blazar_oslomsg_notify_transport }}"
     _oslomsg_notify_policies: "{{ blazar_oslomsg_notify_policies }}"
+    _oslomsg_notify_configure: "{{ blazar_oslomsg_notify_configure }}"
   tags:
     - always
 
