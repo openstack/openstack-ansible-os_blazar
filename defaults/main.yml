@@ -193,6 +193,10 @@ blazar_oslomsg_notify_policies: []
 
 ## RabbitMQ integration
 blazar_oslomsg_rabbit_quorum_queues: "{{ oslomsg_rabbit_quorum_queues | default(True) }}"
+blazar_oslomsg_rabbit_stream_fanout: "{{ oslomsg_rabbit_stream_fanout | default(blazar_oslomsg_rabbit_quorum_queues) }}"
+blazar_oslomsg_rabbit_transient_quorum_queues: "{{ oslomsg_rabbit_transient_quorum_queues | default(blazar_oslomsg_rabbit_stream_fanout) }}"
+blazar_oslomsg_rabbit_qos_prefetch_count: "{{ oslomsg_rabbit_qos_prefetch_count | default(blazar_oslomsg_rabbit_stream_fanout | ternary(10, 0)) }}"
+blazar_oslomsg_rabbit_queue_manager: "{{ oslomsg_rabbit_queue_manager | default(blazar_oslomsg_rabbit_quorum_queues) }}"
 blazar_oslomsg_rabbit_quorum_delivery_limit: "{{ oslomsg_rabbit_quorum_delivery_limit | default(0) }}"
 blazar_oslomsg_rabbit_quorum_max_memory_bytes: "{{ oslomsg_rabbit_quorum_max_memory_bytes | default(0) }}"
 

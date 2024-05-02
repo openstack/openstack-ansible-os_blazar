@@ -26,6 +26,10 @@ lock_path = /run/lock/{{ blazar_services['blazar-api']['service_name'] }}/uwsgi
 [oslo_messaging_rabbit]
 ssl = {{ blazar_oslomsg_notify_use_ssl | bool }}
 rabbit_quorum_queue = {{ blazar_oslomsg_rabbit_quorum_queues }}
+rabbit_transient_quorum_queue = {{ blazar_oslomsg_rabbit_transient_quorum_queues }}
+rabbit_qos_prefetch_count = {{ blazar_oslomsg_rabbit_qos_prefetch_count }}
+use_queue_manager = {{ blazar_oslomsg_rabbit_queue_manager }}
+rabbit_stream_fanout = {{ blazar_oslomsg_rabbit_stream_fanout }}
 rabbit_quorum_delivery_limit = {{ blazar_oslomsg_rabbit_quorum_delivery_limit }}
 rabbit_quorum_max_memory_bytes = {{ blazar_oslomsg_rabbit_quorum_max_memory_bytes }}
 {% endif %}
