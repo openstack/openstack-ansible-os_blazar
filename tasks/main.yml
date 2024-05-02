@@ -66,11 +66,13 @@
     _oslomsg_rpc_password: "{{ blazar_oslomsg_rpc_password }}"
     _oslomsg_rpc_vhost: "{{ blazar_oslomsg_rpc_vhost }}"
     _oslomsg_rpc_transport: "{{ blazar_oslomsg_rpc_transport }}"
+    _oslomsg_rpc_policies: "{{ blazar_oslomsg_rpc_policies }}"
     _oslomsg_notify_setup_host: "{{ blazar_oslomsg_notify_setup_host }}"
     _oslomsg_notify_userid: "{{ blazar_oslomsg_notify_userid }}"
     _oslomsg_notify_password: "{{ blazar_oslomsg_notify_password }}"
     _oslomsg_notify_vhost: "{{ blazar_oslomsg_notify_vhost }}"
     _oslomsg_notify_transport: "{{ blazar_oslomsg_notify_transport }}"
+    _oslomsg_notify_policies: "{{ blazar_oslomsg_notify_policies }}"
   tags:
     - always
 
