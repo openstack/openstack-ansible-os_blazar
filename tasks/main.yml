@@ -123,6 +123,7 @@
   import_tasks: blazar_post_install.yml
   tags:
     - blazar-config
+    - post-install
 
 - name: Importing blazar_db_setup tasks
   import_tasks: blazar_db_setup.yml
