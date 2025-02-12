@@ -15,7 +15,7 @@
 # limitations under the License.
 
 - name: Create blazar database schema
-  command: >
+  ansible.builtin.command: >
     {{ blazar_bin }}/blazar-db-manage
     --config-file {{ blazar_etc_dir }}/blazar.conf upgrade head
   become: true

@@ -15,7 +15,7 @@
 # limitations under the License.
 
 - name: Gather variables for each operating system
-  include_vars: "{{ lookup('first_found', params) }}"
+  ansible.builtin.include_vars: "{{ lookup('first_found', params) }}"
   vars:
     params:
       files:
@@ -30,7 +30,7 @@
     - always
 
 - name: Including osa.db_setup role
-  include_role:
+  ansible.builtin.include_role:
     name: openstack.osa.db_setup
     apply:
       tags:
@@ -52,7 +52,7 @@
     - always
 
 - name: Including osa.mq_setup role
-  include_role:
+  ansible.builtin.include_role:
     name: openstack.osa.mq_setup
     apply:
       tags:
@@ -78,12 +78,12 @@
     - always
 
 - name: Importing blazar_pre_install tasks
-  import_tasks: blazar_pre_install.yml
+  ansible.builtin.import_tasks: blazar_pre_install.yml
   tags:
     - blazar-install
 
 - name: Create and install SSL certificates
-  include_role:
+  ansible.builtin.include_role:
     name: pki
     tasks_from: main_certs.yml
     apply:
@@ -103,7 +103,7 @@
     - always
 
 - name: Install the python venv
-  import_role:
+  ansible.builtin.import_role:
     name: "python_venv_build"
   vars:
     venv_build_constraints: "{{ blazar_git_constraints }}"
@@ -120,20 +120,20 @@
     - blazar-install
 
 - name: Importing blazar_post_install tasks
-  import_tasks: blazar_post_install.yml
+  ansible.builtin.import_tasks: blazar_post_install.yml
   tags:
     - blazar-config
     - post-install
 
 - name: Importing blazar_db_setup tasks
-  import_tasks: blazar_db_setup.yml
+  ansible.builtin.import_tasks: blazar_db_setup.yml
   when:
     - _blazar_is_first_play_host
   tags:
     - blazar-config
 
 - name: Import uwsgi role
-  import_role:
+  ansible.builtin.import_role:
     name: uwsgi
   vars:
     uwsgi_services: "{{ uwsgi_blazar_services }}"
@@ -143,7 +143,7 @@
     - uwsgi
 
 - name: Run the systemd service role
-  import_role:
+  ansible.builtin.import_role:
     name: systemd_service
   vars:
     systemd_user_name: "{{ blazar_system_user_name }}"
@@ -161,7 +161,7 @@
     - systemd-service
 
 - name: Including osa.service_setup role
-  include_role:
+  ansible.builtin.include_role:
     name: openstack.osa.service_setup
     apply:
       tags:
@@ -202,7 +202,7 @@
     - always
 
 - name: Create required Nova aggregates
-  include_role:
+  ansible.builtin.include_role:
     name: openstack.osa.openstack_resources
   vars:
     openstack_resources_compute:

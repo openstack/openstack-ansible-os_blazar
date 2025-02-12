@@ -15,18 +15,18 @@
 # limitations under the License.
 
 - name: Create blazar group
-  group:
+  ansible.builtin.group:
     name: "{{ blazar_system_group_name }}"
     state: present
 
 - name: Create blazar user
-  user:
+  ansible.builtin.user:
     name: "{{ blazar_system_user_name }}"
     group: "{{ blazar_system_group_name }}"
     createhome: false
 
 - name: Create blazar directories
-  file:
+  ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
     owner: "{{ item.owner | default(blazar_system_user_name) }}"
