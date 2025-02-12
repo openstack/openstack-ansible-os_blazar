@@ -116,7 +116,7 @@ blazar_services:
     service_name: blazar-api
     init_config_overrides: "{{ blazar_api_init_config_overrides }}"
     start_order: 1
-    wsgi_app: True
+    wsgi_app: true
     wsgi_name: blazar-api-wsgi
     uwsgi_port: "{{ blazar_service_port }}"
     uwsgi_bind_address: "{{ blazar_bind_address }}"
@@ -230,7 +230,7 @@ blazar_pki_setup_host: "{{ openstack_pki_setup_host | default('localhost') }}"
 blazar_pki_keys_path: "{{ blazar_pki_dir ~ '/certs/private/' }}"
 blazar_pki_certs_path: "{{ blazar_pki_dir ~ '/certs/certs/' }}"
 blazar_pki_intermediate_cert_name: "{{ openstack_pki_service_intermediate_cert_name | default('ExampleCorpIntermediate') }}"
-blazar_pki_regen_cert: ''
+blazar_pki_regen_cert: ""
 blazar_pki_san: "{{ openstack_pki_san | default('DNS:' ~ ansible_facts['hostname'] ~ ',IP:' ~ management_address) }}"
 blazar_pki_certificates:
   - name: "blazar_{{ ansible_facts['hostname'] }}"

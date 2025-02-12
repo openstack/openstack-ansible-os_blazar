@@ -23,7 +23,7 @@
   user:
     name: "{{ blazar_system_user_name }}"
     group: "{{ blazar_system_group_name }}"
-    createhome: no
+    createhome: false
 
 - name: Create blazar directories
   file:
