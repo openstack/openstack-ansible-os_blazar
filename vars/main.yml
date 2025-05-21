@@ -66,7 +66,6 @@ uwsgi_blazar_services: |-
          and ('wsgi_app' in value and value['wsgi_app']) %}
   {%     set _ = value.update(
             {
-             'wsgi_path':  blazar_bin ~ '/' ~ value.wsgi_name,
              'wsgi_venv': blazar_bin | dirname,
              'uwsgi_uid': blazar_system_user_name,
              'uwsgi_guid': blazar_system_group_name,

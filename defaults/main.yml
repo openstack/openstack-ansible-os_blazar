@@ -117,7 +117,7 @@ blazar_services:
     init_config_overrides: "{{ blazar_api_init_config_overrides }}"
     start_order: 1
     wsgi_app: true
-    wsgi_name: blazar-api-wsgi
+    wsgi: "blazar.wsgi.api:application"
     uwsgi_port: "{{ blazar_service_port }}"
     uwsgi_bind_address: "{{ blazar_bind_address }}"
     uwsgi_overrides: "{{ blazar_api_uwsgi_ini_overrides }}"
