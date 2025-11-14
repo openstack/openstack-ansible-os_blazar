@@ -33,7 +33,6 @@
     - dest: "{{ blazar_etc_dir }}/policy.yaml"
       content: "{{ blazar_policy_overrides }}"
       config_type: "yaml"
-      condition: "{{ (blazar_policy_overrides) }}"
   notify:
     - Restart blazar services
     - Restart uwsgi services
