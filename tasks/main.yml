@@ -189,10 +189,6 @@
         interface: "admin"
         url: "{{ blazar_service_adminurl }}"
     _service_catalog:
-      # NOTE(damiandabrowski): remove in 2024.1
-      - name: "{{ blazar_service_name }}"
-        type: policy
-        state: absent
       - name: "{{ blazar_service_name }}"
         type: "{{ blazar_service_type }}"
         description: "{{ blazar_service_description }}"
