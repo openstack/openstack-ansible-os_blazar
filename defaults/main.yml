@@ -231,12 +231,14 @@ blazar_pki_keys_path: "{{ blazar_pki_dir ~ '/certs/private/' }}"
 blazar_pki_certs_path: "{{ blazar_pki_dir ~ '/certs/certs/' }}"
 blazar_pki_intermediate_cert_name: "{{ openstack_pki_service_intermediate_cert_name | default('ExampleCorpIntermediate') }}"
 blazar_pki_regen_cert: ""
-blazar_pki_san: "{{ openstack_pki_san | default('DNS:' ~ ansible_facts['hostname'] ~ ',IP:' ~ management_address) }}"
+blazar_pki_san: "{{ openstack_pki_san | default({'dns': [ansible_facts['hostname']], 'ip': [management_address]}) }}"
+blazar_pki_backend: "{{ openstack_pki_backend | default('standalone') }}"
 blazar_pki_certificates:
   - name: "blazar_{{ ansible_facts['hostname'] }}"
-    provider: ownca
     cn: "{{ ansible_facts['hostname'] }}"
     san: "{{ blazar_pki_san }}"
+    # standalone backend only
+    provider: ownca
     signed_by: "{{ blazar_pki_intermediate_cert_name }}"
 
 # blazar destination files for SSL certificates
@@ -245,17 +247,21 @@ blazar_ssl_key: /etc/blazar/blazar.key
 
 # Installation details for SSL certificates
 blazar_pki_install_certificates:
-  - src: "{{ blazar_user_ssl_cert | default(blazar_pki_certs_path ~ 'blazar_' ~ ansible_facts['hostname'] ~ '-chain.crt') }}"
+  - name: "blazar_{{ ansible_facts['hostname'] }}"
+    type: "certificate_chain"
     dest: "{{ blazar_ssl_cert }}"
     owner: "{{ blazar_system_user_name }}"
     group: "{{ blazar_system_user_name }}"
-    mode: "0644"
-  - src: "{{ blazar_user_ssl_key | default(blazar_pki_keys_path ~ 'blazar_' ~ ansible_facts['hostname'] ~ '.key.pem') }}"
+    # standalone backend only
+    src: "{{ blazar_user_ssl_cert | default(blazar_pki_certs_path ~ 'blazar_' ~ ansible_facts['hostname'] ~ '-chain.crt') }}"
+  - name: "blazar_{{ ansible_facts['hostname'] }}"
+    type: "private_key"
     dest: "{{ blazar_ssl_key }}"
     owner: "{{ blazar_system_user_name }}"
     group: "{{ blazar_system_user_name }}"
-    mode: "0600"
+    # standalone backend only
+    src: "{{ blazar_user_ssl_key | default(blazar_pki_keys_path ~ 'blazar_' ~ ansible_facts['hostname'] ~ '.key.pem') }}"
 
 # Define user-provided SSL certificates
-# blazar_user_ssl_cert: <path to cert on ansible deployment host>
-# blazar_user_ssl_key: <path to cert on ansible deployment host>
+blazar_user_ssl_cert: ""
+blazar_user_ssl_key: ""

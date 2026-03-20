@@ -91,9 +91,10 @@
         - blazar-config
         - pki
   vars:
+    pki_backend: "{{ blazar_pki_backend }}"
     pki_setup_host: "{{ blazar_pki_setup_host }}"
     pki_dir: "{{ blazar_pki_dir }}"
-    pki_create_certificates: "{{ blazar_user_ssl_cert is not defined and blazar_user_ssl_key is not defined }}"
+    pki_create_certificates: "{{ blazar_user_ssl_cert | length == 0 and blazar_user_ssl_key | length == 0 }}"
     pki_regen_cert: "{{ blazar_pki_regen_cert }}"
     pki_certificates: "{{ blazar_pki_certificates }}"
     pki_install_certificates: "{{ blazar_pki_install_certificates }}"
