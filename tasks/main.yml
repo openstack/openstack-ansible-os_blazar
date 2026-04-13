@@ -206,4 +206,4 @@
         - name: "{{ blazar_nova_aggregate_name }}"
           exclusive: "no"
   when:
-    - blazar_nova_aggregate_name
+    - blazar_nova_aggregate_name | length > 0
