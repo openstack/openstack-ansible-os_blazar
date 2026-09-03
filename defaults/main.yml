@@ -54,7 +54,7 @@ blazar_memcached_servers: "{{ memcached_servers }}"
 
 ## Common PIP requirements
 blazar_pip_packages:
-  - "git+{{ blazar_git_repo }}@{{ blazar_git_install_branch }}#egg=blazar"
+  - "blazar@git+{{ blazar_git_repo }}@{{ blazar_git_install_branch }}"
   - blazar-nova
   - osprofiler
   - pymysql
